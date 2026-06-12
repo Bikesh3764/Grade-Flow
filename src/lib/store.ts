@@ -162,7 +162,6 @@ export const useAppStore = create<AppState>()(
 );
 
 // Auto-save logic
-const supabase = createClient();
 let saveTimeout: NodeJS.Timeout;
 
 useAppStore.subscribe((state, prevState) => {
@@ -171,8 +170,9 @@ useAppStore.subscribe((state, prevState) => {
   clearTimeout(saveTimeout);
   saveTimeout = setTimeout(async () => {
     // Check if Supabase URL is available
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return;
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return;
 
+    const supabase = createClient();
     const { data: { session } } = await supabase.auth.getSession();
     if (!session?.user) return;
     
