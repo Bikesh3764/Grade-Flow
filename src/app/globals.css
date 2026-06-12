@@ -2,26 +2,104 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@layer base {
+  :root {
+    --primary: 0 74 198;
+    --on-primary: 255 255 255;
+    --primary-container: 218 226 255;
+    --on-primary-container: 0 24 73;
+    
+    --secondary: 86 94 113;
+    --on-secondary: 255 255 255;
+    --secondary-container: 218 226 249;
+    --on-secondary-container: 19 28 43;
+    
+    --tertiary: 112 85 116;
+    --on-tertiary: 255 255 255;
+    --tertiary-container: 250 215 252;
+    --on-tertiary-container: 41 19 44;
+    
+    --error: 186 26 26;
+    --on-error: 255 255 255;
+    --error-container: 255 218 214;
+    --on-error-container: 65 0 2;
+    
+    --background: 254 251 255;
+    --on-background: 27 27 31;
+    --surface: 254 251 255;
+    --on-surface: 27 27 31;
+    --surface-variant: 224 226 236;
+    --on-surface-variant: 68 71 79;
+    --outline: 116 119 127;
+    --outline-variant: 196 198 207;
+    
+    --inverse-surface: 48 48 52;
+    --inverse-on-surface: 242 240 244;
+    --inverse-primary: 176 198 255;
+    
+    --surface-tint: 0 74 198;
+    
+    --surface-container-highest: 227 225 229;
+    --surface-container-high: 233 231 235;
+    --surface-container: 238 237 241;
+    --surface-container-low: 244 242 246;
+    --surface-container-lowest: 255 255 255;
+  }
+
+  .dark {
+    --primary: 176 198 255;
+    --on-primary: 0 40 120;
+    --primary-container: 0 58 157;
+    --on-primary-container: 218 226 255;
+    
+    --secondary: 191 198 219;
+    --on-secondary: 40 48 65;
+    --secondary-container: 62 70 88;
+    --on-secondary-container: 218 226 249;
+    
+    --tertiary: 221 188 224;
+    --on-tertiary: 63 39 67;
+    --tertiary-container: 87 61 91;
+    --on-tertiary-container: 250 215 252;
+    
+    --error: 255 180 171;
+    --on-error: 105 0 5;
+    --error-container: 147 0 10;
+    --on-error-container: 255 180 171;
+    
+    --background: 27 27 31;
+    --on-background: 227 225 229;
+    --surface: 27 27 31;
+    --on-surface: 227 225 229;
+    --surface-variant: 68 71 79;
+    --on-surface-variant: 196 198 207;
+    --outline: 142 144 153;
+    --outline-variant: 68 71 79;
+    
+    --inverse-surface: 227 225 229;
+    --inverse-on-surface: 48 48 52;
+    --inverse-primary: 0 74 198;
+    
+    --surface-tint: 176 198 255;
+    
+    --surface-container-highest: 51 51 55;
+    --surface-container-high: 40 40 44;
+    --surface-container: 30 30 34;
+    --surface-container-low: 27 27 31;
+    --surface-container-lowest: 15 15 17;
+  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer utilities {
+  .glass-panel {
+    @apply bg-surface/80 backdrop-blur-md border border-outline-variant/30 shadow-elevation-1;
+  }
+  
+  .glass-card {
+    @apply bg-surface-container-lowest/70 backdrop-blur-sm border border-outline-variant/20 shadow-elevation-1;
   }
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+  @apply bg-background text-on-background antialiased transition-colors duration-200;
 }

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GradeFlow Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@500;600&amp;family=Inter:wght@400;600;700;900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "on-error-container": "#ffdad6",
+                "surface": "#0b1326",
+                "on-surface-variant": "#c2c6d6",
+                "error-container": "#93000a",
+                "surface-container-lowest": "#060e20",
+                "on-tertiary-fixed-variant": "#39485a",
+                "tertiary-container": "#8392a6",
+                "background": "#0b1326",
+                "on-primary-fixed": "#001a42",
+                "surface-dim": "#0b1326",
+                "on-secondary-fixed-variant": "#2f2ebe",
+                "surface-variant": "#2d3449",
+                "on-tertiary-container": "#1c2b3c",
+                "secondary-fixed-dim": "#c0c1ff",
+                "on-tertiary-fixed": "#0d1c2d",
+                "primary": "#adc6ff",
+                "primary-container": "#4d8eff",
+                "secondary-fixed": "#e1e0ff",
+                "surface-container": "#171f33",
+                "on-primary": "#002e6a",
+                "inverse-primary": "#005ac2",
+                "error": "#ffb4ab",
+                "inverse-surface": "#dae2fd",
+                "surface-bright": "#31394d",
+                "on-tertiary": "#233143",
+                "secondary-container": "#3131c0",
+                "on-surface": "#dae2fd",
+                "tertiary-fixed": "#d4e4fa",
+                "on-primary-container": "#00285d",
+                "surface-tint": "#adc6ff",
+                "surface-container-low": "#131b2e",
+                "surface-container-highest": "#2d3449",
+                "tertiary-fixed-dim": "#b9c8de",
+                "secondary": "#c0c1ff",
+                "surface-container-high": "#222a3d",
+                "outline-variant": "#424754",
+                "primary-fixed-dim": "#adc6ff",
+                "tertiary": "#b9c8de",
+                "on-background": "#dae2fd",
+                "on-error": "#690005",
+                "primary-fixed": "#d8e2ff",
+                "inverse-on-surface": "#283044",
+                "on-secondary": "#1000a9",
+                "on-secondary-fixed": "#07006c",
+                "on-secondary-container": "#b0b2ff",
+                "outline": "#8c909f",
+                "on-primary-fixed-variant": "#004395"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "margin-mobile": "16px",
+                "base": "4px",
+                "xs": "4px",
+                "2xl": "48px",
+                "md": "16px",
+                "sm": "8px",
+                "container-max": "1280px",
+                "3xl": "64px",
+                "gutter": "24px",
+                "lg": "24px",
+                "xl": "32px",
+                "max-width": "1440px",
+                "margin-desktop": "48px"
+        },
+        "fontFamily": {
+                "label-md": [
+                        "Inter"
+                ],
+                "label-sm": [
+                        "Inter"
+                ],
+                "title-md": [
+                        "Inter"
+                ],
+                "display-lg": [
+                        "Inter"
+                ],
+                "display": [
+                        "Inter"
+                ],
+                "headline-lg-mobile": [
+                        "Inter"
+                ],
+                "headline-lg": [
+                        "Inter"
+                ],
+                "headline-md": [
+                        "Inter"
+                ],
+                "body-lg": [
+                        "Inter"
+                ],
+                "body-md": [
+                        "Inter"
+                ],
+                "caption": [
+                        "Inter"
+                ]
+        },
+        "fontSize": {
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.01em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "1.2",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "title-md": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "display-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "display": [
+                        "48px",
+                        {
+                                "lineHeight": "1.1",
+                                "letterSpacing": "-0.04em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-md": [
+                        "24px",
+                        {
+                                "lineHeight": "1.3",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "caption": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "fontWeight": "400"
+                        }
+                ]
+        },
+        animation: {
+          'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+          'shimmer': 'shimmer 2s infinite linear',
+          'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          'scale-in': 'scaleIn 0.5s ease-out forwards',
+        },
+        keyframes: {
+          fadeInUp: {
+            '0%': { opacity: '0', transform: 'translateY(20px)' },
+            '100%': { opacity: '1', transform: 'translateY(0)' },
+          },
+          shimmer: {
+            '0%': { backgroundPosition: '-1000px 0' },
+            '100%': { backgroundPosition: '1000px 0' },
+          },
+          scaleIn: {
+            '0%': { opacity: '0', transform: 'scale(0.9)' },
+            '100%': { opacity: '1', transform: 'scale(1)' },
+          }
+        }
+      },
+    },
+  }
+</script>
+<style>
+        .glass-panel {
+            background: rgba(11, 19, 38, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+        }
+        .glass-card {
+            background: #171f33;
+            border: 1px solid #2d3449;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.4);
+            transform: translateY(-4px) scale(1.01);
+            border-color: rgba(77, 142, 255, 0.4);
+        }
+        
+        .chart-grid {
+            background-image: linear-gradient(to right, #2d3449 1px, transparent 1px), linear-gradient(to bottom, #2d3449 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .shimmer-effect {
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite linear;
+        }
+
+        .stagger-1 { animation-delay: 100ms; opacity: 0; }
+        .stagger-2 { animation-delay: 200ms; opacity: 0; }
+        .stagger-3 { animation-delay: 300ms; opacity: 0; }
+        .stagger-4 { animation-delay: 400ms; opacity: 0; }
+        .stagger-5 { animation-delay: 500ms; opacity: 0; }
+        .stagger-6 { animation-delay: 600ms; opacity: 0; }
+
+        .nav-item-hover {
+            transition: all 0.2s ease-in-out;
+        }
+        .nav-item-hover:hover {
+            transform: translateX(6px);
+        }
+
+        .btn-press:active {
+            transform: scale(0.95);
+        }
+        
+        .chart-point {
+            transition: all 0.3s ease;
+        }
+        .chart-point:hover {
+            transform: scale(1.5);
+            box-shadow: 0 0 15px rgba(37, 99, 235, 0.6);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md text-body-md antialiased overflow-x-hidden">
+<!-- App Container -->
+<div class="flex h-screen w-full">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col fixed left-0 top-0 h-full w-72 bg-surface/80 dark:bg-inverse-surface/80 backdrop-blur-xl border-r border-outline-variant/30 dark:border-outline/20 shadow-lg dark:shadow-none p-4 z-50 overflow-y-auto">
+<!-- Brand -->
+<div class="flex items-center gap-3 mb-8 px-2">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-on-primary shadow-sm animate-scale-in">
+<span class="material-symbols-outlined" style='font-variation-settings: "FILL" 1;'>school</span>
+</div>
+<div class="animate-fade-in-up">
+<h1 class="text-headline-md font-headline-md font-black text-primary dark:text-primary-fixed-dim tracking-tight">GradeFlow</h1>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Academic Excellence</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex flex-col gap-1 flex-grow">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 dark:bg-primary-container/20 text-primary dark:text-primary-fixed-dim border-l-4 border-primary font-label-md text-label-md translate-x-1 duration-150 btn-press" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-secondary-container hover:text-primary hover:bg-surface-container-highest/40 dark:hover:bg-on-secondary-fixed-variant/10 transition-colors font-label-md text-label-md nav-item-hover btn-press" href="#">
+<span class="material-symbols-outlined">calculate</span>
+                    CGPA Calculator
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-secondary-container hover:text-primary hover:bg-surface-container-highest/40 dark:hover:bg-on-secondary-fixed-variant/10 transition-colors font-label-md text-label-md nav-item-hover btn-press" href="#">
+<span class="material-symbols-outlined">functions</span>
+                    SGPA Calculator
+                </a><a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-secondary-container hover:text-primary hover:bg-surface-container-highest/40 dark:hover:bg-on-secondary-fixed-variant/10 transition-colors font-label-md text-label-md nav-item-hover btn-press" href="#">
+<span class="material-symbols-outlined">school</span>
+                    University Hub
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-secondary-container hover:text-primary hover:bg-surface-container-highest/40 dark:hover:bg-on-secondary-fixed-variant/10 transition-colors font-label-md text-label-md nav-item-hover btn-press" href="#">
+<span class="material-symbols-outlined">trending_up</span>
+                    Target Predictor
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-secondary-container hover:text-primary hover:bg-surface-container-highest/40 dark:hover:bg-on-secondary-fixed-variant/10 transition-colors font-label-md text-label-md nav-item-hover btn-press" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                    GPA Calculator
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-secondary-container hover:text-primary hover:bg-surface-container-highest/40 dark:hover:bg-on-secondary-fixed-variant/10 transition-colors font-label-md text-label-md nav-item-hover btn-press" href="#">
+<span class="material-symbols-outlined">swap_horiz</span>
+                    Converter
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-secondary-container hover:text-primary hover:bg-surface-container-highest/40 dark:hover:bg-on-secondary-fixed-variant/10 transition-colors font-label-md text-label-md nav-item-hover btn-press" href="#">
+<span class="material-symbols-outlined">assessment</span>
+                    Grade Calculator
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-secondary-container hover:text-primary hover:bg-surface-container-highest/40 dark:hover:bg-on-secondary-fixed-variant/10 transition-colors font-label-md text-label-md nav-item-hover btn-press" href="#">
+<span class="material-symbols-outlined">error_outline</span>
+                    Backlog Impact
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-secondary-container hover:text-primary hover:bg-surface-container-highest/40 dark:hover:bg-on-secondary-fixed-variant/10 transition-colors font-label-md text-label-md nav-item-hover btn-press" href="#">
+<span class="material-symbols-outlined">event_note</span>
+                    Semester Planner
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-secondary-container hover:text-primary hover:bg-surface-container-highest/40 dark:hover:bg-on-secondary-fixed-variant/10 transition-colors font-label-md text-label-md nav-item-hover btn-press" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+                    Saved Results
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-secondary-container hover:text-primary hover:bg-surface-container-highest/40 dark:hover:bg-on-secondary-fixed-variant/10 transition-colors font-label-md text-label-md nav-item-hover btn-press" href="#">
+<span class="material-symbols-outlined">description</span>
+                    Reports
+                </a>
+</div>
+<div class="mt-auto pt-4 border-t border-outline-variant/30">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-secondary-container hover:text-primary hover:bg-surface-container-highest/40 dark:hover:bg-on-secondary-fixed-variant/10 transition-colors font-label-md text-label-md nav-item-hover btn-press" href="#">
+<span class="material-symbols-outlined">settings</span>
+                    Settings
+                </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col md:ml-72 min-h-screen relative">
+<!-- Decorative background blur -->
+<div class="absolute top-[-10%] right-[-5%] w-96 h-96 bg-primary-fixed-dim rounded-full mix-blend-multiply filter blur-[100px] opacity-20 z-0 pointer-events-none"></div>
+<div class="absolute bottom-[-10%] left-[10%] w-80 h-80 bg-secondary-fixed-dim rounded-full mix-blend-multiply filter blur-[100px] opacity-10 z-0 pointer-events-none"></div>
+<!-- Top Header (Mobile & Desktop) -->
+<header class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 z-40 bg-surface/80 dark:bg-inverse-surface/80 backdrop-blur-xl border-b border-outline-variant/30 sticky top-0 shadow-sm animate-fade-in-up">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-on-surface-variant p-2 rounded-lg hover:bg-surface-container btn-press">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="text-headline-md font-headline-md font-semibold text-on-surface hidden md:block">Overview</h2>
+<h2 class="text-headline-lg-mobile font-headline-lg-mobile font-bold text-primary md:hidden">GradeFlow</h2>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high/50 rounded-full transition-colors relative btn-press">
+<span class="material-symbols-outlined hover:animate-pulse">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full animate-pulse-slow"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high/50 rounded-full transition-colors hidden sm:block btn-press">
+<span class="material-symbols-outlined hover:rotate-180 transition-transform duration-500">dark_mode</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-primary-container overflow-hidden border-2 border-surface shadow-sm cursor-pointer hover:scale-105 transition-transform btn-press">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a student with a neutral expression, used as an avatar profile picture in a sleek, modern UI context. Light background, high quality lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYr5Rzqz8hwDw0jGOcEv8qkFV6xl4DYIrVZLgvuvXRFWyZ1PtykO5wbblc02Zatw3UWDCnyolPmrJToH_4dyF9AtSXZopP29hOE_Dq1lfQwje5g8JEO6HHHQuypTvqFBWlXbnvvgKjlPPZeO39HrWXRuIAucX1eVsGfDx68dzNLZzXz2gsOBL3uKj6MTRAy4jQVhwaqXjE9-nZcLdk4F6ScDdwTx8_Bf_h__jDzBKDG5RlSIzV3dO2_v3U9dyMBGjnqpywKlN0u0s"/>
+</div>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-margin-mobile md:p-margin-desktop z-10 relative">
+<div class="max-w-max-width mx-auto flex flex-col gap-lg pb-12">
+<!-- Welcome Section -->
+<section class="flex flex-col gap-2 mb-4 animate-fade-in-up stagger-1">
+<h1 class="text-headline-lg font-headline-lg text-on-surface">Welcome back, Alex.</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant">Here is your academic standing for Semester 6.</p>
+</section>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-lg auto-rows-min">
+<!-- Top Row: Stat Cards (Spans full width, grids internally) -->
+<div class="col-span-1 md:col-span-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- CGPA Card -->
+<div class="glass-card rounded-[20px] p-lg flex flex-col gap-4 relative overflow-hidden group animate-fade-in-up stagger-2">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary/5 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+<div class="flex justify-between items-start z-10">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Current CGPA</span>
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:rotate-12 transition-transform">
+<span class="material-symbols-outlined text-[18px]">school</span>
+</div>
+</div>
+<div class="flex items-end gap-2 z-10 mt-2">
+<span class="font-display text-display text-primary font-bold counter" data-target="8.92">8.92</span>
+<span class="font-label-md text-label-md text-tertiary-container flex items-center mb-2 bg-tertiary-container/10 px-2 py-0.5 rounded-full hover:scale-105 transition-transform cursor-default">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span> 0.15
+                                    </span>
+</div>
+</div>
+<!-- Percentage Card -->
+<div class="glass-card rounded-[20px] p-lg flex flex-col gap-4 relative overflow-hidden group animate-fade-in-up stagger-3">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-tertiary/5 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+<div class="flex justify-between items-start z-10">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Current Percentage</span>
+<div class="w-8 h-8 rounded-full bg-tertiary/10 flex items-center justify-center text-tertiary group-hover:rotate-12 transition-transform">
+<span class="material-symbols-outlined text-[18px]">percent</span>
+</div>
+</div>
+<div class="flex items-end gap-2 z-10 mt-2">
+<span class="font-display text-display text-on-surface font-bold"><span class="counter" data-target="84.5">84.5</span>%</span>
+</div>
+<!-- Mini progress bar -->
+<div class="w-full h-1.5 bg-surface-container-high rounded-full mt-auto overflow-hidden">
+<div class="h-full bg-tertiary rounded-full transition-all duration-1000 ease-out w-0" id="percentBar" style="width: 84.5%"></div>
+</div>
+</div>
+<!-- Credits Card -->
+<div class="glass-card rounded-[20px] p-lg flex flex-col gap-4 relative overflow-hidden group animate-fade-in-up stagger-4">
+<div class="flex justify-between items-start z-10">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Credits Completed</span>
+<div class="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center text-secondary group-hover:-rotate-12 transition-transform">
+<span class="material-symbols-outlined text-[18px]">library_books</span>
+</div>
+</div>
+<div class="flex items-baseline gap-1 z-10 mt-2">
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold counter" data-target="124">124</span>
+<span class="font-body-md text-body-md text-on-surface-variant">/ 160</span>
+</div>
+<!-- Progress arc placeholder -->
+<div class="w-full h-1.5 bg-surface-container-high rounded-full mt-auto overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-1000 ease-out w-0 delay-300" id="creditsBar" style="width: 77.5%"></div>
+</div>
+</div>
+<!-- Standing Card -->
+<div class="glass-card rounded-[20px] p-lg flex flex-col gap-2 relative overflow-hidden group border-l-4 border-l-tertiary animate-fade-in-up stagger-5">
+<div class="flex justify-between items-start z-10">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Academic Standing</span>
+</div>
+<div class="z-10 mt-2">
+<span class="font-headline-md text-headline-md text-on-surface font-bold leading-tight group-hover:text-tertiary transition-colors">First Class<br/><span class="text-tertiary">with Distinction</span></span>
+</div>
+</div>
+</div>
+<!-- Middle Row: Main Charts -->
+<!-- Line Chart (Large) -->
+<div class="col-span-1 md:col-span-8 glass-card rounded-[20px] p-lg flex flex-col gap-4 min-h-[350px] animate-fade-in-up stagger-5">
+<div class="flex justify-between items-center">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">CGPA Trend</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Progress over 6 semesters</p>
+</div>
+<button class="text-primary font-label-md text-label-md flex items-center gap-1 hover:bg-primary/5 px-3 py-1.5 rounded-lg transition-colors btn-press group">
+                                    Details <span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">chevron_right</span>
+</button>
+</div>
+<!-- Mock Line Chart CSS representation -->
+<div class="flex-1 relative mt-4 chart-grid flex items-end justify-between pt-10 pb-6 px-4">
+<!-- Y-axis labels -->
+<div class="absolute left-0 top-0 bottom-6 flex flex-col justify-between text-[10px] text-outline font-label-sm w-6 text-right pr-2">
+<span class="">10</span><span class="">9</span><span class="">8</span><span class="">7</span><span class="">6</span>
+</div>
+<!-- Data points and line segments (visual representation) -->
+<div class="w-full h-full relative z-10 flex justify-between items-end">
+<!-- SVG overlay for the line -->
+<svg class="absolute inset-0 w-full h-full" preserveaspectratio="none">
+<defs>
+<lineargradient id="gradient" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="rgba(37, 99, 235, 0.2)"></stop>
+<stop offset="100%" stop-color="rgba(37, 99, 235, 0)"></stop>
+</lineargradient>
+</defs>
+<path class="animate-[scaleIn_1s_ease-out_forwards]" d="M 5% 50% L 23% 30% L 41% 35% L 59% 20% L 77% 15% L 95% 10%" fill="none" stroke="#2563eb" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" style="stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: dash 2s ease-out forwards;"></path>
+<path class="animate-[fadeInUp_1.5s_ease-out_forwards]" d="M 5% 50% L 23% 30% L 41% 35% L 59% 20% L 77% 15% L 95% 10% L 95% 100% L 5% 100% Z" fill="url(#gradient)" style="opacity: 0;"></path>
+<style>
+                                        @keyframes dash {
+                                            to {
+                                                stroke-dashoffset: 0;
+                                            }
+                                        }
+                                    </style>
+</svg>
+<!-- Points and X-axis labels -->
+<div class="flex flex-col items-center gap-4 relative z-20" style="width: 10%">
+<div class="w-3 h-3 bg-surface border-2 border-primary rounded-full mb-[80px] shadow-sm chart-point animate-scale-in" style="animation-delay: 0.2s"></div>
+<span class="text-[11px] font-label-sm text-on-surface-variant mt-auto">Sem 1</span>
+</div>
+<div class="flex flex-col items-center gap-4 relative z-20" style="width: 10%">
+<div class="w-3 h-3 bg-surface border-2 border-primary rounded-full mb-[120px] shadow-sm chart-point animate-scale-in" style="animation-delay: 0.4s"></div>
+<span class="text-[11px] font-label-sm text-on-surface-variant mt-auto">Sem 2</span>
+</div>
+<div class="flex flex-col items-center gap-4 relative z-20" style="width: 10%">
+<div class="w-3 h-3 bg-surface border-2 border-primary rounded-full mb-[110px] shadow-sm chart-point animate-scale-in" style="animation-delay: 0.6s"></div>
+<span class="text-[11px] font-label-sm text-on-surface-variant mt-auto">Sem 3</span>
+</div>
+<div class="flex flex-col items-center gap-4 relative z-20" style="width: 10%">
+<div class="w-3 h-3 bg-surface border-2 border-primary rounded-full mb-[140px] shadow-sm relative chart-point animate-scale-in group" style="animation-delay: 0.8s">
+<!-- Tooltip style on one point -->
+<div class="absolute -top-8 -left-3 bg-inverse-surface text-inverse-on-surface text-[10px] px-2 py-1 rounded shadow-md whitespace-nowrap font-label-sm opacity-0 group-hover:opacity-100 transition-opacity">8.6</div>
+</div>
+<span class="text-[11px] font-label-sm text-on-surface-variant mt-auto">Sem 4</span>
+</div>
+<div class="flex flex-col items-center gap-4 relative z-20" style="width: 10%">
+<div class="w-3 h-3 bg-surface border-2 border-primary rounded-full mb-[150px] shadow-sm chart-point animate-scale-in" style="animation-delay: 1.0s"></div>
+<span class="text-[11px] font-label-sm text-on-surface-variant mt-auto">Sem 5</span>
+</div>
+<div class="flex flex-col items-center gap-4 relative z-20" style="width: 10%">
+<div class="w-4 h-4 bg-primary border-2 border-surface rounded-full mb-[160px] shadow-md ring-2 ring-primary/30 chart-point animate-scale-in animate-pulse-slow" style="animation-delay: 1.2s"></div>
+<span class="text-[11px] font-label-sm text-primary font-bold mt-auto">Sem 6</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bar Chart & Insights Stack -->
+<div class="col-span-1 md:col-span-4 flex flex-col gap-lg">
+<!-- Insights Card -->
+<div class="glass-card rounded-[20px] p-lg bg-gradient-to-br from-primary-fixed to-primary-container/20 border-primary/20 relative overflow-hidden animate-fade-in-up stagger-5 hover:-translate-y-1 transition-transform">
+<div class="absolute inset-0 shimmer-effect z-0 pointer-events-none"></div>
+<div class="absolute right-[-20px] top-[-20px] text-primary/10 group-hover:rotate-12 transition-transform duration-700">
+<span class="material-symbols-outlined text-[120px]" style='font-variation-settings: "FILL" 1;'>military_tech</span>
+</div>
+<div class="relative z-10 flex flex-col gap-3">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-md mb-2 animate-bounce" style="animation-duration: 2s; animation-iteration-count: 3;">
+<span class="material-symbols-outlined">emoji_events</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-primary-fixed-variant leading-tight">Excellent Standing</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">You're in the top <strong class="text-primary font-bold">5%</strong> of your batch. Keep it up!</p>
+</div>
+</div>
+<!-- Bar Chart (Semester Performance) -->
+<div class="glass-card rounded-[20px] p-lg flex-1 flex flex-col animate-fade-in-up stagger-6">
+<h3 class="font-label-md text-label-md text-on-surface font-semibold mb-6 uppercase tracking-wider">Credits Earned</h3>
+<div class="flex-1 flex items-end justify-between gap-2 px-2 pb-6 relative border-b border-outline-variant/30">
+<!-- Y-axis guide lines -->
+<div class="absolute w-full top-0 border-t border-dashed border-outline-variant/30 h-0"></div>
+<div class="absolute w-full top-1/2 border-t border-dashed border-outline-variant/30 h-0"></div>
+<!-- Bars -->
+<div class="w-8 bg-surface-variant rounded-t-sm hover:bg-primary/40 transition-colors relative group h-0 animate-[fadeInUp_1s_ease-out_forwards]" style="height: 60%; animation-delay: 0.1s">
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-label-sm text-outline">S1</div>
+</div>
+<div class="w-8 bg-surface-variant rounded-t-sm hover:bg-primary/40 transition-colors relative group h-0 animate-[fadeInUp_1s_ease-out_forwards]" style="height: 75%; animation-delay: 0.2s">
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-label-sm text-outline">S2</div>
+</div>
+<div class="w-8 bg-surface-variant rounded-t-sm hover:bg-primary/40 transition-colors relative group h-0 animate-[fadeInUp_1s_ease-out_forwards]" style="height: 65%; animation-delay: 0.3s">
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-label-sm text-outline">S3</div>
+</div>
+<div class="w-8 bg-surface-variant rounded-t-sm hover:bg-primary/40 transition-colors relative group h-0 animate-[fadeInUp_1s_ease-out_forwards]" style="height: 90%; animation-delay: 0.4s">
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-label-sm text-outline">S4</div>
+</div>
+<div class="w-8 bg-surface-variant rounded-t-sm hover:bg-primary/40 transition-colors relative group h-0 animate-[fadeInUp_1s_ease-out_forwards]" style="height: 85%; animation-delay: 0.5s">
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-label-sm text-outline">S5</div>
+</div>
+<div class="w-8 bg-primary rounded-t-sm relative group h-0 animate-[fadeInUp_1s_ease-out_forwards] shadow-[0_0_10px_rgba(37,99,235,0.3)] hover:-translate-y-1 transition-transform" style="height: 100%; animation-delay: 0.6s">
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-label-sm text-primary font-bold">S6</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Row: Achievements -->
+<div class="col-span-1 md:col-span-12 glass-card rounded-[20px] p-lg animate-fade-in-up stagger-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md text-on-surface">Achievements</h3>
+<a class="font-label-sm text-label-sm text-primary hover:underline hover:text-primary-container transition-colors" href="#">View all</a>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+<!-- Badge 1 -->
+<div class="flex flex-col items-center gap-3 p-4 rounded-xl border border-outline-variant/20 bg-surface-container-lowest hover:border-tertiary/50 hover:shadow-md transition-all group hover:-translate-y-1 cursor-pointer">
+<div class="w-14 h-14 rounded-full bg-gradient-to-tr from-yellow-400 to-yellow-200 flex items-center justify-center shadow-inner group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300">
+<span class="material-symbols-outlined text-white text-[28px]" style='font-variation-settings: "FILL" 1;'>star</span>
+</div>
+<span class="font-label-sm text-label-sm text-center text-on-surface">9+ CGPA</span>
+</div>
+<!-- Badge 2 -->
+<div class="flex flex-col items-center gap-3 p-4 rounded-xl border border-outline-variant/20 bg-surface-container-lowest hover:border-primary/50 hover:shadow-md transition-all group hover:-translate-y-1 cursor-pointer">
+<div class="w-14 h-14 rounded-full bg-gradient-to-tr from-blue-500 to-cyan-300 flex items-center justify-center shadow-inner group-hover:scale-110 group-hover:-rotate-12 transition-transform duration-300">
+<span class="material-symbols-outlined text-white text-[28px]" style='font-variation-settings: "FILL" 1;'>sync</span>
+</div>
+<span class="font-label-sm text-label-sm text-center text-on-surface">Consistent Performer</span>
+</div>
+<!-- Badge 3 -->
+<div class="flex flex-col items-center gap-3 p-4 rounded-xl border border-outline-variant/20 bg-surface-container-lowest hover:border-tertiary/50 hover:shadow-md transition-all group hover:-translate-y-1 cursor-pointer">
+<div class="w-14 h-14 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-300 flex items-center justify-center shadow-inner group-hover:scale-110 group-hover:rotate-[360deg] transition-transform duration-700">
+<span class="material-symbols-outlined text-white text-[28px]" style='font-variation-settings: "FILL" 1;'>trending_up</span>
+</div>
+<span class="font-label-sm text-label-sm text-center text-on-surface">Top Improver</span>
+</div>
+<!-- Locked Badge -->
+<div class="flex flex-col items-center gap-3 p-4 rounded-xl border border-dashed border-outline-variant/40 bg-surface-container-lowest/50 opacity-60 grayscale hover:opacity-80 hover:grayscale-0 transition-all cursor-not-allowed">
+<div class="w-14 h-14 rounded-full bg-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-outline text-[28px]">lock</span>
+</div>
+<span class="font-label-sm text-label-sm text-center text-outline">Dean's List</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+    // Counter Animation Logic
+    const counters = document.querySelectorAll('.counter');
+    const speed = 200; // The lower the slower
+
+    const animateCounters = () => {
+        counters.forEach(counter => {
+            const target = +counter.getAttribute('data-target');
+            // Determine if it's a float or int
+            const isFloat = counter.getAttribute('data-target').includes('.');
+            
+            const updateCount = () => {
+                const count = +counter.innerText;
+                const inc = target / speed;
+
+                if (count < target) {
+                    if(isFloat) {
+                         counter.innerText = (count + inc).toFixed(2);
+                    } else {
+                         counter.innerText = Math.ceil(count + inc);
+                    }
+                    setTimeout(updateCount, 1);
+                } else {
+                    counter.innerText = target;
+                }
+            };
+            
+            // reset before animate
+            counter.innerText = isFloat ? '0.00' : '0';
+            updateCount();
+        });
+    };
+
+    // Ensure initial bars are 0 width for animation
+    document.addEventListener('DOMContentLoaded', () => {
+        // Trigger counters
+        setTimeout(animateCounters, 500); // delay to let entrance animation start
+        
+        // Trigger progress bars
+        setTimeout(() => {
+            const percentBar = document.getElementById('percentBar');
+            if(percentBar) percentBar.style.width = '84.5%';
+            
+            const creditsBar = document.getElementById('creditsBar');
+            if(creditsBar) creditsBar.style.width = '77.5%';
+        }, 800);
+    });
+</script>
+</body></html>
