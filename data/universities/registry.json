@@ -55298,5 +55298,545 @@
         }
       }
     ]
+  },
+  {
+    "id": "delhi-university",
+    "name": "Delhi University",
+    "shortName": "Delhi University",
+    "location": "Delhi",
+    "isPlaceholder": true,
+    "regulations": [
+      {
+        "id": "placeholder-10",
+        "name": "Standard 10-Point Scale",
+        "gradingScale": [
+          {
+            "grade": "O",
+            "points": 10,
+            "description": "Outstanding"
+          },
+          {
+            "grade": "A+",
+            "points": 9,
+            "description": "Excellent"
+          },
+          {
+            "grade": "A",
+            "points": 8,
+            "description": "Very Good"
+          },
+          {
+            "grade": "B+",
+            "points": 7,
+            "description": "Good"
+          },
+          {
+            "grade": "B",
+            "points": 6,
+            "description": "Above Average"
+          },
+          {
+            "grade": "C",
+            "points": 5,
+            "description": "Average"
+          },
+          {
+            "grade": "P",
+            "points": 4,
+            "description": "Pass"
+          },
+          {
+            "grade": "F",
+            "points": 0,
+            "description": "Fail"
+          }
+        ],
+        "formulas": {
+          "cgpa": "sum(sgpa * credits) / sum(credits)",
+          "sgpa": "sum(points * credits) / sum(credits)",
+          "percentage": "(cgpa - 0.75) * 10"
+        }
+      }
+    ]
+  },
+  {
+    "id": "mumbai-university",
+    "name": "Mumbai University",
+    "shortName": "Mumbai University",
+    "location": "Maharashtra",
+    "isPlaceholder": true,
+    "regulations": [
+      {
+        "id": "placeholder-10",
+        "name": "Standard 10-Point Scale",
+        "gradingScale": [
+          {
+            "grade": "O",
+            "points": 10,
+            "description": "Outstanding"
+          },
+          {
+            "grade": "A+",
+            "points": 9,
+            "description": "Excellent"
+          },
+          {
+            "grade": "A",
+            "points": 8,
+            "description": "Very Good"
+          },
+          {
+            "grade": "B+",
+            "points": 7,
+            "description": "Good"
+          },
+          {
+            "grade": "B",
+            "points": 6,
+            "description": "Above Average"
+          },
+          {
+            "grade": "C",
+            "points": 5,
+            "description": "Average"
+          },
+          {
+            "grade": "P",
+            "points": 4,
+            "description": "Pass"
+          },
+          {
+            "grade": "F",
+            "points": 0,
+            "description": "Fail"
+          }
+        ],
+        "formulas": {
+          "cgpa": "sum(sgpa * credits) / sum(credits)",
+          "sgpa": "sum(points * credits) / sum(credits)",
+          "percentage": "(cgpa - 0.75) * 10"
+        }
+      }
+    ]
+  },
+  {
+    "id": "calcutta-university",
+    "name": "Calcutta University",
+    "shortName": "Calcutta University",
+    "location": "West Bengal",
+    "isPlaceholder": true,
+    "regulations": [
+      {
+        "id": "placeholder-10",
+        "name": "Standard 10-Point Scale",
+        "gradingScale": [
+          {
+            "grade": "O",
+            "points": 10,
+            "description": "Outstanding"
+          },
+          {
+            "grade": "A+",
+            "points": 9,
+            "description": "Excellent"
+          },
+          {
+            "grade": "A",
+            "points": 8,
+            "description": "Very Good"
+          },
+          {
+            "grade": "B+",
+            "points": 7,
+            "description": "Good"
+          },
+          {
+            "grade": "B",
+            "points": 6,
+            "description": "Above Average"
+          },
+          {
+            "grade": "C",
+            "points": 5,
+            "description": "Average"
+          },
+          {
+            "grade": "P",
+            "points": 4,
+            "description": "Pass"
+          },
+          {
+            "grade": "F",
+            "points": 0,
+            "description": "Fail"
+          }
+        ],
+        "formulas": {
+          "cgpa": "sum(sgpa * credits) / sum(credits)",
+          "sgpa": "sum(points * credits) / sum(credits)",
+          "percentage": "(cgpa - 0.75) * 10"
+        }
+      }
+    ]
+  },
+  {
+    "id": "osmania-university",
+    "name": "Osmania University",
+    "shortName": "Osmania University",
+    "location": "Telangana",
+    "isPlaceholder": true,
+    "regulations": [
+      {
+        "id": "placeholder-10",
+        "name": "Standard 10-Point Scale",
+        "gradingScale": [
+          {
+            "grade": "O",
+            "points": 10,
+            "description": "Outstanding"
+          },
+          {
+            "grade": "A+",
+            "points": 9,
+            "description": "Excellent"
+          },
+          {
+            "grade": "A",
+            "points": 8,
+            "description": "Very Good"
+          },
+          {
+            "grade": "B+",
+            "points": 7,
+            "description": "Good"
+          },
+          {
+            "grade": "B",
+            "points": 6,
+            "description": "Above Average"
+          },
+          {
+            "grade": "C",
+            "points": 5,
+            "description": "Average"
+          },
+          {
+            "grade": "P",
+            "points": 4,
+            "description": "Pass"
+          },
+          {
+            "grade": "F",
+            "points": 0,
+            "description": "Fail"
+          }
+        ],
+        "formulas": {
+          "cgpa": "sum(sgpa * credits) / sum(credits)",
+          "sgpa": "sum(points * credits) / sum(credits)",
+          "percentage": "(cgpa - 0.75) * 10"
+        }
+      }
+    ]
+  },
+  {
+    "id": "andhra-university",
+    "name": "Andhra University",
+    "shortName": "Andhra University",
+    "location": "Andhra Pradesh",
+    "isPlaceholder": true,
+    "regulations": [
+      {
+        "id": "placeholder-10",
+        "name": "Standard 10-Point Scale",
+        "gradingScale": [
+          {
+            "grade": "O",
+            "points": 10,
+            "description": "Outstanding"
+          },
+          {
+            "grade": "A+",
+            "points": 9,
+            "description": "Excellent"
+          },
+          {
+            "grade": "A",
+            "points": 8,
+            "description": "Very Good"
+          },
+          {
+            "grade": "B+",
+            "points": 7,
+            "description": "Good"
+          },
+          {
+            "grade": "B",
+            "points": 6,
+            "description": "Above Average"
+          },
+          {
+            "grade": "C",
+            "points": 5,
+            "description": "Average"
+          },
+          {
+            "grade": "P",
+            "points": 4,
+            "description": "Pass"
+          },
+          {
+            "grade": "F",
+            "points": 0,
+            "description": "Fail"
+          }
+        ],
+        "formulas": {
+          "cgpa": "sum(sgpa * credits) / sum(credits)",
+          "sgpa": "sum(points * credits) / sum(credits)",
+          "percentage": "(cgpa - 0.75) * 10"
+        }
+      }
+    ]
+  },
+  {
+    "id": "shiv-nadar",
+    "name": "Shiv Nadar University",
+    "shortName": "Shiv Nadar",
+    "location": "Uttar Pradesh",
+    "isPlaceholder": true,
+    "regulations": [
+      {
+        "id": "placeholder-10",
+        "name": "Standard 10-Point Scale",
+        "gradingScale": [
+          {
+            "grade": "O",
+            "points": 10,
+            "description": "Outstanding"
+          },
+          {
+            "grade": "A+",
+            "points": 9,
+            "description": "Excellent"
+          },
+          {
+            "grade": "A",
+            "points": 8,
+            "description": "Very Good"
+          },
+          {
+            "grade": "B+",
+            "points": 7,
+            "description": "Good"
+          },
+          {
+            "grade": "B",
+            "points": 6,
+            "description": "Above Average"
+          },
+          {
+            "grade": "C",
+            "points": 5,
+            "description": "Average"
+          },
+          {
+            "grade": "P",
+            "points": 4,
+            "description": "Pass"
+          },
+          {
+            "grade": "F",
+            "points": 0,
+            "description": "Fail"
+          }
+        ],
+        "formulas": {
+          "cgpa": "sum(sgpa * credits) / sum(credits)",
+          "sgpa": "sum(points * credits) / sum(credits)",
+          "percentage": "(cgpa - 0.75) * 10"
+        }
+      }
+    ]
+  },
+  {
+    "id": "kj-somaiya",
+    "name": "K J Somaiya",
+    "shortName": "K J Somaiya",
+    "location": "Maharashtra",
+    "isPlaceholder": true,
+    "regulations": [
+      {
+        "id": "placeholder-10",
+        "name": "Standard 10-Point Scale",
+        "gradingScale": [
+          {
+            "grade": "O",
+            "points": 10,
+            "description": "Outstanding"
+          },
+          {
+            "grade": "A+",
+            "points": 9,
+            "description": "Excellent"
+          },
+          {
+            "grade": "A",
+            "points": 8,
+            "description": "Very Good"
+          },
+          {
+            "grade": "B+",
+            "points": 7,
+            "description": "Good"
+          },
+          {
+            "grade": "B",
+            "points": 6,
+            "description": "Above Average"
+          },
+          {
+            "grade": "C",
+            "points": 5,
+            "description": "Average"
+          },
+          {
+            "grade": "P",
+            "points": 4,
+            "description": "Pass"
+          },
+          {
+            "grade": "F",
+            "points": 0,
+            "description": "Fail"
+          }
+        ],
+        "formulas": {
+          "cgpa": "sum(sgpa * credits) / sum(credits)",
+          "sgpa": "sum(points * credits) / sum(credits)",
+          "percentage": "(cgpa - 0.75) * 10"
+        }
+      }
+    ]
+  },
+  {
+    "id": "sggsie-t",
+    "name": "SGGSIE&T",
+    "shortName": "SGGSIE-T",
+    "location": "Maharashtra",
+    "isPlaceholder": true,
+    "regulations": [
+      {
+        "id": "placeholder-10",
+        "name": "Standard 10-Point Scale",
+        "gradingScale": [
+          {
+            "grade": "O",
+            "points": 10,
+            "description": "Outstanding"
+          },
+          {
+            "grade": "A+",
+            "points": 9,
+            "description": "Excellent"
+          },
+          {
+            "grade": "A",
+            "points": 8,
+            "description": "Very Good"
+          },
+          {
+            "grade": "B+",
+            "points": 7,
+            "description": "Good"
+          },
+          {
+            "grade": "B",
+            "points": 6,
+            "description": "Above Average"
+          },
+          {
+            "grade": "C",
+            "points": 5,
+            "description": "Average"
+          },
+          {
+            "grade": "P",
+            "points": 4,
+            "description": "Pass"
+          },
+          {
+            "grade": "F",
+            "points": 0,
+            "description": "Fail"
+          }
+        ],
+        "formulas": {
+          "cgpa": "sum(sgpa * credits) / sum(credits)",
+          "sgpa": "sum(points * credits) / sum(credits)",
+          "percentage": "(cgpa - 0.75) * 10"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ms-ramaiah",
+    "name": "M S Ramaiah",
+    "shortName": "M S Ramaiah",
+    "location": "Karnataka",
+    "isPlaceholder": true,
+    "regulations": [
+      {
+        "id": "placeholder-10",
+        "name": "Standard 10-Point Scale",
+        "gradingScale": [
+          {
+            "grade": "O",
+            "points": 10,
+            "description": "Outstanding"
+          },
+          {
+            "grade": "A+",
+            "points": 9,
+            "description": "Excellent"
+          },
+          {
+            "grade": "A",
+            "points": 8,
+            "description": "Very Good"
+          },
+          {
+            "grade": "B+",
+            "points": 7,
+            "description": "Good"
+          },
+          {
+            "grade": "B",
+            "points": 6,
+            "description": "Above Average"
+          },
+          {
+            "grade": "C",
+            "points": 5,
+            "description": "Average"
+          },
+          {
+            "grade": "P",
+            "points": 4,
+            "description": "Pass"
+          },
+          {
+            "grade": "F",
+            "points": 0,
+            "description": "Fail"
+          }
+        ],
+        "formulas": {
+          "cgpa": "sum(sgpa * credits) / sum(credits)",
+          "sgpa": "sum(points * credits) / sum(credits)",
+          "percentage": "(cgpa - 0.75) * 10"
+        }
+      }
+    ]
   }
 ]

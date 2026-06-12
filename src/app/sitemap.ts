@@ -2,15 +2,9 @@ import { MetadataRoute } from 'next';
 import { universities } from '@/lib/universities/registry';
 import { guideTypes } from '@/lib/guides/content';
 
-const ITEMS_PER_SITEMAP = 2000;
-
-export async function generateSitemaps() {
-  const count = Math.ceil(universities.length / ITEMS_PER_SITEMAP);
-  return Array.from({ length: count }).map((_, i) => ({ id: i }));
-}
-
-export default function sitemap({ id }: { id: number }): MetadataRoute.Sitemap {
-  const baseUrl = 'https://gradeflow.app';
+export default function sitemap(): MetadataRoute.Sitemap {
+  // Uses your environment variable, or defaults to gradeflow.app
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gradeflow.app';
   const sitemapUrls: MetadataRoute.Sitemap = [];
   const currentDate = new Date();
 
@@ -27,55 +21,60 @@ export default function sitemap({ id }: { id: number }): MetadataRoute.Sitemap {
     "grading-system"
   ];
 
-  if (id === 0) {
+  sitemapUrls.push({
+    url: `${baseUrl}/`,
+    lastModified: currentDate,
+    changeFrequency: 'weekly',
+    priority: 1,
+  });
+
+  sitemapUrls.push({
+    url: `${baseUrl}/dashboard`,
+    lastModified: currentDate,
+    changeFrequency: 'weekly',
+    priority: 0.9,
+  });
+
+  sitemapUrls.push({
+    url: `${baseUrl}/university-hub`,
+    lastModified: currentDate,
+    changeFrequency: 'weekly',
+    priority: 0.9,
+  });
+
+  // New MPA Legal & Contact Pages
+  const staticPages = ['privacy-policy', 'terms-and-conditions', 'faq', 'contact', 'help-center'];
+  for (const page of staticPages) {
     sitemapUrls.push({
-      url: `${baseUrl}/`,
+      url: `${baseUrl}/${page}`,
       lastModified: currentDate,
-      changeFrequency: 'weekly',
-      priority: 1,
+      changeFrequency: 'monthly',
+      priority: 0.6,
     });
-
-    sitemapUrls.push({
-      url: `${baseUrl}/dashboard`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    });
-
-    sitemapUrls.push({
-      url: `${baseUrl}/university-hub`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    });
-
-    // Informational Guides
-    for (const guide of guideTypes) {
-      sitemapUrls.push({
-        url: `${baseUrl}/${guide}`,
-        lastModified: currentDate,
-        changeFrequency: 'monthly',
-        priority: 0.8,
-      });
-    }
-
-    // Generic Tools
-    for (const type of pageTypes) {
-      sitemapUrls.push({
-        url: `${baseUrl}/${type}`,
-        lastModified: currentDate,
-        changeFrequency: 'monthly',
-        priority: 0.8,
-      });
-    }
   }
 
-  // Slice the universities for this specific chunk
-  const start = id * ITEMS_PER_SITEMAP;
-  const end = start + ITEMS_PER_SITEMAP;
-  const chunkedUniversities = universities.slice(start, end);
+  // Informational Guides
+  for (const guide of guideTypes) {
+    sitemapUrls.push({
+      url: `${baseUrl}/${guide}`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    });
+  }
 
-  for (const uni of chunkedUniversities) {
+  // Generic Tools
+  for (const type of pageTypes) {
+    sitemapUrls.push({
+      url: `${baseUrl}/${type}`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    });
+  }
+
+  // Generate for ALL universities (~9,000 links total, well under Google's 50,000 limit)
+  for (const uni of universities) {
     const slugPrefix = uni.shortName ? uni.shortName.toLowerCase().replace(/[^a-z0-9]+/g, '-') : uni.id;
     for (const type of pageTypes) {
       sitemapUrls.push({

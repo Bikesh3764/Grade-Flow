@@ -16,6 +16,7 @@ import { SeoGuide } from "@/components/seo/SeoGuide";
 import { guideTypes, guides, GuideType } from "@/lib/guides/content";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
+import { VerificationBanner } from "@/components/universities/VerificationBanner";
 
 type PageType = 
   "cgpa-calculator" | 
@@ -249,6 +250,11 @@ export default async function SEOUniversityPage({ params }: { params: Promise<{ 
   return (
     <>
       {schema}
+      {university.isPlaceholder && (
+        <div className="max-w-4xl mx-auto mt-8 px-4 sm:px-6 lg:px-8">
+          <VerificationBanner universityName={university.name} />
+        </div>
+      )}
       {content}
       {relatedLinks}
     </>

@@ -36,5 +36,6 @@ export type University = {
   location: string;
   type?: UniversityType;
   nirfRanking?: string;
+  isPlaceholder?: boolean;
   regulations: Regulation[];
 };

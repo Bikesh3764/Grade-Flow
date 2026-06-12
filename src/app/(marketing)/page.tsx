@@ -26,6 +26,8 @@ export default function LandingPage() {
           <div className="hidden md:flex items-center gap-gutter">
             <a className="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors duration-200" href="#features">Features</a>
             <a className="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors duration-200" href="#university-hub">University Hub</a>
+            <Link className="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors duration-200" href="/faq">FAQ</Link>
+            <Link className="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors duration-200" href="/contact">Contact Us</Link>
           </div>
           <div className="flex items-center gap-md">
             <Link href="/dashboard" className="bg-primary text-on-primary font-label-md text-label-md px-md py-sm rounded-full shadow-sm hover:-translate-y-px hover:shadow-md transition-all">
@@ -251,8 +253,41 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* SEO Content Section */}
+        <section className="py-xl px-margin-mobile md:px-margin-desktop bg-background pb-12">
+          <div className="max-w-4xl mx-auto prose dark:prose-invert text-on-surface-variant">
+            <h2 className="text-3xl font-bold text-on-surface mb-6">The Ultimate CGPA Calculator for Indian Universities</h2>
+            
+            <p className="mb-4">
+              Welcome to GradeFlow, the most advanced <strong>cgpa calculator</strong> available for students across India. Whether you are aiming for high-paying corporate placements, preparing for higher studies abroad, or simply monitoring your academic progress semester by semester, understanding your Cumulative Grade Point Average (CGPA) is absolutely critical. To simplify this complex process, our platform offers a massive suite of precision tracking tools, including our dedicated <strong>percentage to cgpa calculator</strong>, our standard <strong>sgpa to cgpa calculator</strong>, and our advanced <strong>marks to cgpa calculator</strong>. 
+            </p>
+
+            <h3 className="text-2xl font-bold text-on-surface mt-8 mb-4">University-Specific Grading Systems</h3>
+            <p className="mb-4">
+              Generic calculators often fail because every university operates on a slightly different formula. If you are a student at the Vellore Institute of Technology, you know that grading algorithms can be incredibly strict. Our highly specialized <strong>vit cgpa calculator</strong> (frequently searched as the <strong>cgpa calculator vit</strong>) relies on exact official institutional algorithms to help you accurately predict and estimate your final graduation scores. Similarly, for engineering students studying at the SRM Institute of Science and Technology, our exclusive <strong>srm cgpa calculator</strong> and the <strong>cgpa calculator srm</strong> will perfectly map your individual subject grades and credits to their specific 10-point scale.
+            </p>
+
+            <p className="mb-4">
+              We also provide comprehensive support for major regional technical universities. If you are currently enrolled in a college in Kerala, the <strong>ktu cgpa calculator</strong> (or the <strong>cgpa calculator ktu</strong>) makes navigating your complex eight-semester curriculum seamless. For engineering and technology students in Karnataka, our meticulously designed <strong>cgpa calculator vtu</strong> and the <strong>vtu cgpa calculator</strong> integrate the latest VTU 2021 and 2022 grading scheme regulations to ensure absolute accuracy when calculating your final degree classification. 
+            </p>
+
+            <p className="mb-4">
+              Students located in Delhi consistently trust our <strong>ipu cgpa calculator</strong> and the <strong>cgpa calculator ipu</strong> for their exact conversion needs, helping them track their credits without manual spreadsheet errors. Down south, if you are studying at a college affiliated with Anna University, you are likely dealing with varying regulation years. Our intelligent <strong>cgpa calculator anna university</strong> and the robust <strong>anna university cgpa calculator</strong> are specifically tailored to handle those exact semester structures, credit weightages, and grading shifts. Furthermore, we proudly offer specialized mathematical support for Saveetha University students through our verified <strong>saveetha cgpa calculator</strong>, as well as students at KL University relying on our precise <strong>kl cgpa calculator</strong>.
+            </p>
+
+            <h3 className="text-2xl font-bold text-on-surface mt-8 mb-4">Advanced Conversions: Marks, Percentage, and GPA</h3>
+            <p className="mb-4">
+              But what if your university only provides you with your total marks or an overall percentage? GradeFlow has you completely covered. You can effortlessly use our <strong>cgpa calculator to percentage</strong> tool to reverse-engineer your final transcript scores for job applications. Conversely, if an employer asks for a 10-point scale equivalent from your marksheet, our <strong>percentage to cgpa calculator</strong> will handle the conversion instantly. 
+            </p>
+
+            <p className="mb-4">
+              If you are planning to apply for master's programs in the United States or Europe, you might need to convert your standard Indian 10-point scale to a 4.0 scale. Try our streamlined <strong>gpa to cgpa calculator</strong> to see exactly where you stand globally. Whether you need a standard <strong>percentage to cgpa calculator</strong> for rapid off-campus tech placement applications, or you need to accurately deploy a <strong>marks to cgpa calculator</strong> to predict your final academic standing before final exams begin, GradeFlow is engineered to be your all-in-one digital academic hub. Stop relying on outdated spreadsheets and mental math. Take control of your academic trajectory today.
+            </p>
+          </div>
+        </section>
+
         {/* FAQ Section */}
-        <section className="py-xl px-margin-mobile md:px-margin-desktop bg-surface pb-2xl">
+        <section id="faq" className="py-xl px-margin-mobile md:px-margin-desktop bg-surface pb-2xl">
           <DynamicFAQ university={generalUniversity} pageType="home" />
         </section>
       </main>
@@ -275,18 +310,21 @@ export default function LandingPage() {
           <div className="flex flex-col gap-sm">
             <h4 className="font-label-md text-label-md text-on-surface dark:text-surface-bright font-bold mb-xs uppercase tracking-wider">Tools</h4>
             <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/cgpa-calculator">CGPA Calculator</Link>
-            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/sgpa-calculator">SGPA Estimator</Link>
-            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/marks-to-cgpa-calculator">Marks Converter</Link>
+            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/sgpa-calculator">SGPA Calculator</Link>
+            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/percentage-to-cgpa-calculator">Percentage to CGPA Calculator</Link>
+            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/marks-to-cgpa-calculator">Marks to CGPA Calculator</Link>
           </div>
           <div className="flex flex-col gap-sm">
             <h4 className="font-label-md text-label-md text-on-surface dark:text-surface-bright font-bold mb-xs uppercase tracking-wider">Resources</h4>
             <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/university-hub">University Directory</Link>
-            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">Help Center</Link>
+            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/help-center">Help Center</Link>
           </div>
           <div className="flex flex-col gap-sm">
             <h4 className="font-label-md text-label-md text-on-surface dark:text-surface-bright font-bold mb-xs uppercase tracking-wider">Legal</h4>
-            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">Privacy Policy</Link>
-            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">Terms of Service</Link>
+            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/privacy-policy">Privacy Policy</Link>
+            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/terms-and-conditions">Terms & Conditions</Link>
+            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/faq">FAQ</Link>
+            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/contact">Contact Us</Link>
           </div>
         </div>
       </footer>
