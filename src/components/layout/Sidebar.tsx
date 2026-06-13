@@ -46,7 +46,8 @@ export function Sidebar({ isMobileOpen, onClose }: { isMobileOpen?: boolean; onC
       )}
       <aside className={clsx(
         "w-72 h-screen border-r border-white/10 dark:border-white/5 bg-white/50 dark:bg-[#0a0a0a]/50 backdrop-blur-xl flex flex-col shrink-0 shadow-[4px_0_24px_-12px_rgba(0,0,0,0.1)] z-50 transition-transform duration-300",
-        isMobileOpen ? "fixed inset-y-0 left-0 translate-x-0" : "hidden lg:flex sticky top-0"
+        "fixed inset-y-0 left-0 lg:sticky lg:top-0",
+        isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       )}>
       <div className="h-16 flex items-center px-6 border-b border-black/5 dark:border-white/5 shrink-0 bg-gradient-to-r from-transparent to-black/[0.02] dark:to-white/[0.02]">
         <div className="flex items-center gap-3 text-primary">
