@@ -50,12 +50,14 @@ export default function Dashboard() {
         </div>
       )}
 
-      {isSetup && currentCgpa > 0 && (
+      {isSetup && (
         <div className="flex justify-between items-center">
           <h2 className="text-headline-sm font-bold">Your Dashboard</h2>
           <ShareButton 
-            title="My CGPA" 
-            text={`I just calculated my CGPA on GradeFlow and got ${currentCgpa.toFixed(2)} at ${university?.name || 'my university'}! Calculate yours:`}
+            title={currentCgpa > 0 ? "My CGPA" : "GradeFlow CGPA Calculator"} 
+            text={currentCgpa > 0 
+              ? `I just calculated my CGPA on GradeFlow and got ${currentCgpa.toFixed(2)} at ${university?.name || 'my university'}! Calculate yours:` 
+              : `Calculate your exact university CGPA instantly on GradeFlow!`}
             url="https://cgpacalculator.xyz" 
           />
         </div>

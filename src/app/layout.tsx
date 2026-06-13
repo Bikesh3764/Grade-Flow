@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { ServiceWorkerRegistration } from "@/components/ui/ServiceWorkerRegistration";
 import Script from "next/script";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
@@ -62,6 +63,7 @@ export default function RootLayout({
       <body className={`${inter.variable} ${geistMono.variable} font-sans bg-background text-on-background`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}
+          <ServiceWorkerRegistration />
         </ThemeProvider>
       </body>
     </html>
