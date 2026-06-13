@@ -4,7 +4,7 @@ import { guideTypes } from '@/lib/guides/content';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   // Uses your environment variable, or defaults to cgpacalculator.xyz
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://cgpacalculator.xyz';
+  const baseUrl = 'https://cgpacalculator.xyz';
   const sitemapUrls: MetadataRoute.Sitemap = [];
   const currentDate = new Date();
 
