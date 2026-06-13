@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { createClient } from '@/utils/supabase/client';
+
 import { GlobalScale } from './universities/types';
 
 export type Course = {
@@ -161,46 +161,4 @@ export const useAppStore = create<AppState>()(
   )
 );
 
-// Auto-save logic
-let saveTimeout: NodeJS.Timeout;
 
-useAppStore.subscribe((state, prevState) => {
-  if (state.profile === prevState.profile) return;
-  
-  clearTimeout(saveTimeout);
-  saveTimeout = setTimeout(async () => {
-    // Check if Supabase URL is available
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return;
-
-    const supabase = createClient();
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session?.user) return;
-    
-    // Sync University Preferences
-    if (state.profile.universityId !== prevState.profile.universityId ||
-        state.profile.regulationId !== prevState.profile.regulationId ||
-        state.profile.activeScaleId !== prevState.profile.activeScaleId) {
-      await supabase.from('university_preferences').upsert({
-        user_id: session.user.id,
-        university_id: state.profile.universityId,
-        regulation_id: state.profile.regulationId,
-        active_scale_id: state.profile.activeScaleId,
-        updated_at: new Date().toISOString()
-      }, { onConflict: 'user_id' });
-    }
-
-    // Sync Semesters (We upsert them all here for simplicity, assuming IDs are UUIDs or unique strings)
-    if (state.profile.semesters !== prevState.profile.semesters) {
-      for (const sem of state.profile.semesters) {
-        await supabase.from('semesters').upsert({
-          id: sem.id,
-          user_id: session.user.id,
-          semester_number: parseInt(sem.name.replace(/[^0-9]/g, '') || '1'),
-          sgpa: sem.sgpa,
-          credits: sem.totalCredits,
-          updated_at: new Date().toISOString()
-        }, { onConflict: 'id' });
-      }
-    }
-  }, 1000);
-});
