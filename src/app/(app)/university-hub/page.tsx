@@ -46,8 +46,8 @@ export default function UniversityHub() {
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-6">
+      <div className="grid lg:grid-cols-3 gap-8 w-full">
+        <div className="lg:col-span-2 space-y-6 min-w-0 w-full">
 
           {/* General Profile Card */}
           <div className="glass-panel rounded-2xl p-6 border border-outline-variant/30 hover:border-outline-variant/50 transition-all bg-surface-container-low relative overflow-hidden">
@@ -93,7 +93,7 @@ export default function UniversityHub() {
             />
           </div>
 
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide w-full min-w-0">
             {["All", "IIT", "NIT", "IIIT", "GFTI", "Private", "State University"].map(type => (
               <button
                 key={type}
@@ -191,7 +191,7 @@ export default function UniversityHub() {
           </div>
         </div>
 
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-1 min-w-0 w-full">
           <div className="glass-panel rounded-2xl p-6 sticky top-24">
             <div className="w-12 h-12 rounded-xl bg-tertiary-container text-on-tertiary-container flex items-center justify-center mb-4">
               <Building2 size={24} />
