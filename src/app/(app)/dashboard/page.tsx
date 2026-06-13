@@ -50,18 +50,16 @@ export default function Dashboard() {
         </div>
       )}
 
-      {isSetup && (
-        <div className="flex justify-between items-center">
-          <h2 className="text-headline-sm font-bold">Your Dashboard</h2>
-          <ShareButton 
-            title={currentCgpa > 0 ? "My CGPA" : "GradeFlow CGPA Calculator"} 
-            text={currentCgpa > 0 
-              ? `I just calculated my CGPA on GradeFlow and got ${currentCgpa.toFixed(2)} at ${university?.name || 'my university'}! Calculate yours:` 
-              : `Calculate your exact university CGPA instantly on GradeFlow!`}
-            url="https://cgpacalculator.xyz" 
-          />
-        </div>
-      )}
+      <div className="flex justify-between items-center mt-8">
+        <h2 className="text-headline-sm font-bold">Your Dashboard</h2>
+        <ShareButton 
+          title={currentCgpa > 0 ? "My CGPA" : "GradeFlow CGPA Calculator"} 
+          text={currentCgpa > 0 
+            ? `I just calculated my CGPA on GradeFlow and got ${currentCgpa.toFixed(2)} at ${university?.name || 'my university'}! Calculate yours:` 
+            : `Calculate your exact university CGPA instantly on GradeFlow!`}
+          url="https://cgpacalculator.xyz" 
+        />
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="glass-panel p-6 rounded-2xl flex flex-col relative overflow-hidden group">

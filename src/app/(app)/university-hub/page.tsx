@@ -158,24 +158,24 @@ export default function UniversityHub() {
                               {isActive && <CheckCircle2 size={16} className="text-primary" />}
                             </p>
                           </div>
-                          <div className="flex items-center gap-2 shrink-0">
+                          <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 shrink-0">
                             <button 
                               onClick={() => openInfo(uni, reg)}
-                              className="px-3 py-2 rounded-lg text-body-sm font-medium text-secondary hover:bg-secondary-container/50 transition-colors flex items-center gap-1.5"
+                              className="w-full sm:w-auto justify-center px-3 py-2 rounded-lg text-body-sm font-medium text-secondary hover:bg-secondary-container/50 transition-colors flex items-center gap-1.5"
                             >
                               <Info size={16} /> Formula Info
                             </button>
                             {isActive ? (
                               <button 
                                 onClick={handleClearProfile}
-                                className="px-4 py-2 rounded-lg bg-error-container hover:bg-error/20 text-error text-body-sm font-medium flex items-center gap-1.5 transition-colors"
+                                className="w-full sm:w-auto justify-center px-4 py-2 rounded-lg bg-error-container hover:bg-error/20 text-error text-body-sm font-medium flex items-center gap-1.5 transition-colors"
                               >
                                 Remove Selection
                               </button>
                             ) : (
                               <button 
                                 onClick={() => handleSetProfile(uni, reg)}
-                                className="px-4 py-2 rounded-lg border border-outline hover:border-primary text-on-surface hover:text-primary hover:bg-primary-container/10 text-body-sm font-medium transition-all"
+                                className="w-full sm:w-auto justify-center px-4 py-2 rounded-lg border border-outline hover:border-primary text-on-surface hover:text-primary hover:bg-primary-container/10 text-body-sm font-medium transition-all"
                               >
                                 Set as Active
                               </button>
