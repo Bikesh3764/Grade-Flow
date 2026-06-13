@@ -28,7 +28,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "CGPA Calculator & Academic Tracker | GradeFlow",
     description: "The ultimate tool to calculate your CGPA, SGPA, and convert percentages to CGPA.",
-  }
+  },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({

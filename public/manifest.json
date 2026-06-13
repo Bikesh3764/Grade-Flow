@@ -1,0 +1,16 @@
+{
+  "name": "GradeFlow - The Ultimate CGPA Calculator",
+  "short_name": "GradeFlow",
+  "description": "Calculate, predict, and manage your university grades.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0ea5e9",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "192x192",
+      "type": "image/x-icon"
+    }
+  ]
+}

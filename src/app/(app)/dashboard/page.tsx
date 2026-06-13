@@ -8,6 +8,8 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "rec
 import Link from "next/link";
 import { BookOpen, Target, TrendingUp, Trophy, ArrowRight, Calculator, RefreshCw } from "lucide-react";
 
+import { ShareButton } from "@/components/ui/ShareButton";
+
 export default function Dashboard() {
   const profile = useAppStore(state => state.profile);
   const [mounted, setMounted] = useState(false);
@@ -45,6 +47,17 @@ export default function Dashboard() {
           <Link href="/university-hub" className="px-6 py-2.5 rounded-xl bg-primary text-on-primary font-medium shadow-elevation-1 hover:shadow-elevation-2 transition-all whitespace-nowrap">
             Setup Profile
           </Link>
+        </div>
+      )}
+
+      {isSetup && currentCgpa > 0 && (
+        <div className="flex justify-between items-center">
+          <h2 className="text-headline-sm font-bold">Your Dashboard</h2>
+          <ShareButton 
+            title="My CGPA" 
+            text={`I just calculated my CGPA on GradeFlow and got ${currentCgpa.toFixed(2)} at ${university?.name || 'my university'}! Calculate yours:`}
+            url="https://cgpacalculator.xyz" 
+          />
         </div>
       )}
 
