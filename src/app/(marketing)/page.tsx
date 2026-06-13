@@ -17,17 +17,17 @@ export default function LandingPage() {
   return (
     <div className="bg-background text-on-surface font-sans antialiased overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container min-h-screen">
       {/* TopNavBar */}
-      <nav className="bg-surface/80 dark:bg-on-background/80 backdrop-blur-xl docked w-full top-0 sticky border-b border-outline-variant/30 dark:border-outline/20 shadow-sm dark:shadow-none z-50">
+      <nav className="bg-surface/80  backdrop-blur-xl docked w-full top-0 sticky border-b border-outline-variant/30  shadow-sm dark:shadow-none z-50">
         <div className="flex justify-between items-center w-full px-margin-desktop max-w-max-width mx-auto h-20">
           <div className="flex items-center gap-2">
-            <GraduationCap className="text-primary dark:text-primary-fixed w-8 h-8" />
-            <span className="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">GradeFlow</span>
+            <GraduationCap className="text-primary  w-8 h-8" />
+            <span className="font-headline-md text-headline-md font-bold text-primary ">GradeFlow</span>
           </div>
           <div className="hidden md:flex items-center gap-gutter">
-            <a className="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors duration-200" href="#features">Features</a>
-            <a className="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors duration-200" href="#university-hub">University Hub</a>
-            <Link className="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors duration-200" href="/faq">FAQ</Link>
-            <Link className="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors duration-200" href="/contact">Contact Us</Link>
+            <a className="font-label-md text-label-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors duration-200" href="#features">Features</a>
+            <a className="font-label-md text-label-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors duration-200" href="#university-hub">University Hub</a>
+            <Link className="font-label-md text-label-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors duration-200" href="/faq">FAQ</Link>
+            <Link className="font-label-md text-label-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors duration-200" href="/contact">Contact Us</Link>
           </div>
           <div className="flex items-center gap-md">
             <Link href="/dashboard" className="bg-primary text-on-primary font-label-md text-label-md px-md py-sm rounded-full shadow-sm hover:-translate-y-px hover:shadow-md transition-all">
@@ -76,7 +76,7 @@ export default function LandingPage() {
             {/* App Mockup */}
             <div className="relative w-full max-w-md mx-auto lg:max-w-none lg:h-[600px] flex items-center justify-center">
               <div className="absolute inset-0 bg-primary/20 rounded-full blur-3xl -z-10 transform translate-x-10 translate-y-10"></div>
-              <div className="rounded-2xl p-3 sm:p-4 shadow-2xl relative z-10 border border-white/40 w-full max-w-sm mx-auto" style={{ background: 'rgba(255, 255, 255, 0.7)', backdropFilter: 'blur(12px)' }}>
+              <div className="rounded-2xl p-3 sm:p-4 shadow-2xl relative z-10 border border-outline-variant/40 w-full max-w-sm mx-auto bg-surface/70 backdrop-blur-xl">
                 <div className="bg-surface rounded-xl overflow-hidden shadow-inner border border-outline-variant/20 h-[500px] relative flex flex-col">
                   <div className="bg-surface-container-lowest p-4 border-b border-outline-variant/20 flex justify-between items-center shadow-sm z-10">
                     <div className="font-headline-md text-headline-md-mobile text-on-surface font-bold tracking-tight">Dashboard</div>
@@ -293,38 +293,38 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-surface-container-lowest dark:bg-on-background w-full border-t border-outline-variant/30 dark:border-outline/20">
+      <footer className="bg-surface-container-lowest  w-full border-t border-outline-variant/30 ">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter px-margin-desktop py-xl max-w-max-width mx-auto">
           <div className="col-span-1 md:col-span-2 lg:col-span-1 flex flex-col gap-md">
             <div className="flex items-center gap-2 mb-sm">
-              <GraduationCap className="text-primary dark:text-primary-fixed w-8 h-8" />
-              <span className="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">GradeFlow</span>
+              <GraduationCap className="text-primary  w-8 h-8" />
+              <span className="font-headline-md text-headline-md font-bold text-primary ">GradeFlow</span>
             </div>
-            <p className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant max-w-xs">
+            <p className="font-body-md text-body-md text-on-surface-variant  max-w-xs">
               Your personal academic strategist. Precision tracking for ambitious students.
             </p>
-            <div className="font-label-sm text-label-sm text-on-surface-variant dark:text-surface-variant mt-auto pt-md">
+            <div className="font-label-sm text-label-sm text-on-surface-variant  mt-auto pt-md">
               © {new Date().getFullYear()} GradeFlow Intelligence. All rights reserved.
             </div>
           </div>
           <div className="flex flex-col gap-sm">
-            <h4 className="font-label-md text-label-md text-on-surface dark:text-surface-bright font-bold mb-xs uppercase tracking-wider">Tools</h4>
-            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/cgpa-calculator">CGPA Calculator</Link>
-            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/sgpa-calculator">SGPA Calculator</Link>
-            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/percentage-to-cgpa-calculator">Percentage to CGPA Calculator</Link>
-            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/marks-to-cgpa-calculator">Marks to CGPA Calculator</Link>
+            <h4 className="font-label-md text-label-md text-on-surface  font-bold mb-xs uppercase tracking-wider">Tools</h4>
+            <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/cgpa-calculator">CGPA Calculator</Link>
+            <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/sgpa-calculator">SGPA Calculator</Link>
+            <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/percentage-to-cgpa-calculator">Percentage to CGPA Calculator</Link>
+            <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/marks-to-cgpa-calculator">Marks to CGPA Calculator</Link>
           </div>
           <div className="flex flex-col gap-sm">
-            <h4 className="font-label-md text-label-md text-on-surface dark:text-surface-bright font-bold mb-xs uppercase tracking-wider">Resources</h4>
-            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/university-hub">University Directory</Link>
-            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/help-center">Help Center</Link>
+            <h4 className="font-label-md text-label-md text-on-surface  font-bold mb-xs uppercase tracking-wider">Resources</h4>
+            <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/university-hub">University Directory</Link>
+            <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/help-center">Help Center</Link>
           </div>
           <div className="flex flex-col gap-sm">
-            <h4 className="font-label-md text-label-md text-on-surface dark:text-surface-bright font-bold mb-xs uppercase tracking-wider">Legal</h4>
-            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/privacy-policy">Privacy Policy</Link>
-            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/terms-and-conditions">Terms & Conditions</Link>
-            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/faq">FAQ</Link>
-            <Link className="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/contact">Contact Us</Link>
+            <h4 className="font-label-md text-label-md text-on-surface  font-bold mb-xs uppercase tracking-wider">Legal</h4>
+            <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/privacy-policy">Privacy Policy</Link>
+            <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/terms-and-conditions">Terms & Conditions</Link>
+            <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/faq">FAQ</Link>
+            <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/contact">Contact Us</Link>
           </div>
         </div>
       </footer>
