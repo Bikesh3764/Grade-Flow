@@ -116,13 +116,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description: guideContent.description,
       keywords: [guideContent.title.toLowerCase().replace(/ /g, ','), "guide", "education", "cgpa", "sgpa"],
       alternates: {
-        canonical: `https://gradeflow.app/${resolvedParams.slug}`
+        canonical: `https://cgpacalculator.xyz/${resolvedParams.slug}`
       },
       openGraph: {
         title: guideContent.title,
         description: guideContent.description,
         type: "article",
-        url: `https://gradeflow.app/${resolvedParams.slug}`
+        url: `https://cgpacalculator.xyz/${resolvedParams.slug}`
       },
       twitter: {
         card: "summary_large_image",
@@ -182,13 +182,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     description,
     keywords: [uni.shortName, "calculator", parsed.pageType.replace(/-/g, ' '), "university", "grading system", "CGPA", "SGPA", "Percentage"],
     alternates: {
-      canonical: `https://gradeflow.app/${canonicalSlug}`
+      canonical: `https://cgpacalculator.xyz/${canonicalSlug}`
     },
     openGraph: {
       title,
       description,
       type: "website",
-      url: `https://gradeflow.app/${canonicalSlug}`
+      url: `https://cgpacalculator.xyz/${canonicalSlug}`
     },
     twitter: {
       card: "summary_large_image",
@@ -208,7 +208,7 @@ export default async function SEOUniversityPage({ params }: { params: Promise<{ 
 
   const slugPrefix = university.shortName ? university.shortName.toLowerCase().replace(/[^a-z0-9]+/g, '-') : university.id;
   const canonicalSlug = parsed.uniId === 'general' ? resolvedParams.slug : `${slugPrefix}-${parsed.pageType}`;
-  const url = `https://gradeflow.app/${canonicalSlug}`;
+  const url = `https://cgpacalculator.xyz/${canonicalSlug}`;
   
   const schema = <StructuredData university={university} pageType={parsed.pageType} url={url} isGuide={parsed.isGuide} />;
   const relatedLinks = parsed.isGuide ? null : <RelatedLinks university={university} currentPage={parsed.pageType} />;

@@ -3,8 +3,8 @@ import { universities } from '@/lib/universities/registry';
 import { guideTypes } from '@/lib/guides/content';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  // Uses your environment variable, or defaults to gradeflow.app
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gradeflow.app';
+  // Uses your environment variable, or defaults to cgpacalculator.xyz
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://cgpacalculator.xyz';
   const sitemapUrls: MetadataRoute.Sitemap = [];
   const currentDate = new Date();
 

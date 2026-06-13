@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "CGPA Calculator & Academic Tracker | GradeFlow",
     description: "Calculate your CGPA, convert percentage to CGPA, or compute marks to CGPA instantly for VIT, SRM, Anna University, and 1000+ others.",
-    url: "https://gradeflow.app",
+    url: "https://cgpacalculator.xyz",
     siteName: "GradeFlow",
     type: "website",
   },

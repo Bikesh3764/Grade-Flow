@@ -79,13 +79,13 @@ export function StructuredData({
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://gradeflow.app"
+        "item": "https://cgpacalculator.xyz"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": isGeneric ? "Tools" : organizationName,
-        "item": isGeneric ? "https://gradeflow.app" : `https://gradeflow.app/university-hub`
+        "item": isGeneric ? "https://cgpacalculator.xyz" : `https://cgpacalculator.xyz/university-hub`
       },
       {
         "@type": "ListItem",
