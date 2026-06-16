@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { universities } from '@/lib/universities/registry';
 import { guideTypes } from '@/lib/guides/content';
 
+export const runtime = 'edge';
+
 const baseUrl = 'https://cgpacalculator.xyz';
 const URLS_PER_SITEMAP = 1000;
 
