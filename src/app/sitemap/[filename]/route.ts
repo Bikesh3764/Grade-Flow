@@ -68,16 +68,6 @@ function getAllUrls() {
   return sitemapUrls;
 }
 
-export async function generateStaticParams() {
-  const allUrls = getAllUrls();
-  const totalSitemaps = Math.ceil(allUrls.length / URLS_PER_SITEMAP);
-  const params = [];
-  for (let i = 0; i < totalSitemaps; i++) {
-    params.push({ filename: `${i}.xml` });
-  }
-  return params;
-}
-
 export async function GET(
   request: Request,
   props: { params: Promise<{ filename: string }> }
