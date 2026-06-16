@@ -1,26 +1,28 @@
-import { MetadataRoute } from 'next';
+import type { MetadataRoute } from 'next';
 import { universities } from '@/lib/universities/registry';
 import { guideTypes } from '@/lib/guides/content';
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  // Uses your environment variable, or defaults to cgpacalculator.xyz
-  const baseUrl = 'https://cgpacalculator.xyz';
+const baseUrl = 'https://cgpacalculator.xyz';
+const URLS_PER_SITEMAP = 1000;
+
+const pageTypes = [
+  "cgpa-calculator",
+  "sgpa-calculator",
+  "cgpa-to-percentage",
+  "percentage-to-cgpa-calculator",
+  "sgpa-to-cgpa-calculator",
+  "gpa-to-cgpa-calculator",
+  "marks-to-cgpa-calculator",
+  "grade-calculator",
+  "grading-system"
+];
+
+// Build the complete list of all sitemap URLs once
+function getAllUrls(): MetadataRoute.Sitemap {
   const sitemapUrls: MetadataRoute.Sitemap = [];
   const currentDate = new Date();
 
   // Core Pages
-  const pageTypes = [
-    "cgpa-calculator",
-    "sgpa-calculator",
-    "cgpa-to-percentage",
-    "percentage-to-cgpa-calculator",
-    "sgpa-to-cgpa-calculator",
-    "gpa-to-cgpa-calculator",
-    "marks-to-cgpa-calculator",
-    "grade-calculator",
-    "grading-system"
-  ];
-
   sitemapUrls.push({
     url: `${baseUrl}/`,
     lastModified: currentDate,
@@ -73,7 +75,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
-  // Generate for ALL universities (~9,000 links total, well under Google's 50,000 limit)
+  // Generate for ALL universities
   for (const uni of universities) {
     const slugPrefix = uni.shortName ? uni.shortName.toLowerCase().replace(/[^a-z0-9]+/g, '-') : uni.id;
     for (const type of pageTypes) {
@@ -96,4 +98,29 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }
 
   return sitemapUrls;
+}
+
+// Generate sitemap index: tells Next.js how many sub-sitemaps to create
+export async function generateSitemaps() {
+  const allUrls = getAllUrls();
+  const totalSitemaps = Math.ceil(allUrls.length / URLS_PER_SITEMAP);
+  
+  const sitemaps = [];
+  for (let i = 0; i < totalSitemaps; i++) {
+    sitemaps.push({ id: i });
+  }
+  return sitemaps;
+}
+
+// Each sub-sitemap only returns its chunk of ~1000 URLs
+export default async function sitemap(props: {
+  id: Promise<string>
+}): Promise<MetadataRoute.Sitemap> {
+  const id = Number(await props.id);
+  const allUrls = getAllUrls();
+  
+  const start = id * URLS_PER_SITEMAP;
+  const end = start + URLS_PER_SITEMAP;
+  
+  return allUrls.slice(start, end);
 }
