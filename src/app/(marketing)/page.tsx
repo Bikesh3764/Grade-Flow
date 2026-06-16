@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { DynamicFAQ } from '@/components/seo/DynamicFAQ';
 import { generalUniversity } from '@/lib/universities/registry';
+import { Footer } from '@/components/layout/Footer';
 
 export default function LandingPage() {
   return (
@@ -293,41 +294,7 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-surface-container-lowest  w-full border-t border-outline-variant/30 ">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter px-margin-desktop py-xl max-w-max-width mx-auto">
-          <div className="col-span-1 md:col-span-2 lg:col-span-1 flex flex-col gap-md">
-            <div className="flex items-center gap-2 mb-sm">
-              <GraduationCap className="text-primary  w-8 h-8" />
-              <span className="font-headline-md text-headline-md font-bold text-primary ">GradeFlow</span>
-            </div>
-            <p className="font-body-md text-body-md text-on-surface-variant  max-w-xs">
-              Your personal academic strategist. Precision tracking for ambitious students.
-            </p>
-            <div className="font-label-sm text-label-sm text-on-surface-variant  mt-auto pt-md">
-              © {new Date().getFullYear()} GradeFlow Intelligence. All rights reserved.
-            </div>
-          </div>
-          <div className="flex flex-col gap-sm">
-            <h4 className="font-label-md text-label-md text-on-surface  font-bold mb-xs uppercase tracking-wider">Tools</h4>
-            <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/cgpa-calculator">CGPA Calculator</Link>
-            <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/sgpa-calculator">SGPA Calculator</Link>
-            <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/percentage-to-cgpa-calculator">Percentage to CGPA Calculator</Link>
-            <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/marks-to-cgpa-calculator">Marks to CGPA Calculator</Link>
-          </div>
-          <div className="flex flex-col gap-sm">
-            <h4 className="font-label-md text-label-md text-on-surface  font-bold mb-xs uppercase tracking-wider">Resources</h4>
-            <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/university-hub">University Directory</Link>
-            <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/help-center">Help Center</Link>
-          </div>
-          <div className="flex flex-col gap-sm">
-            <h4 className="font-label-md text-label-md text-on-surface  font-bold mb-xs uppercase tracking-wider">Legal</h4>
-            <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/privacy-policy">Privacy Policy</Link>
-            <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/terms-and-conditions">Terms & Conditions</Link>
-            <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/faq">FAQ</Link>
-            <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/contact">Contact Us</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

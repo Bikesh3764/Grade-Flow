@@ -5,8 +5,9 @@ import { useAppStore } from "@/lib/store";
 import { searchUniversities, universities } from "@/lib/universities/registry";
 import { University, Regulation } from "@/lib/universities/types";
 import { FormulaInfoModal } from "@/components/universities/FormulaInfoModal";
-import { Search, Info, CheckCircle2, Building2, Globe } from "lucide-react";
+import { Search, Info, CheckCircle2, Building2, Globe, ExternalLink } from "lucide-react";
 import clsx from "clsx";
+import Link from "next/link";
 
 export default function UniversityHub() {
   const profile = useAppStore(state => state.profile);
@@ -138,6 +139,13 @@ export default function UniversityHub() {
                         <span className="w-1.5 h-1.5 rounded-full bg-outline"></span>
                         {uni.location}
                       </p>
+                      <Link 
+                        href={`/${uni.shortName ? uni.shortName.toLowerCase().replace(/[^a-z0-9]+/g, '-') : uni.id}-cgpa-calculator`}
+                        className="inline-flex items-center gap-1.5 mt-2 text-body-sm text-primary hover:text-primary/80 font-medium transition-colors"
+                      >
+                        <ExternalLink size={14} />
+                        View CGPA Calculator
+                      </Link>
                     </div>
                   </div>
 

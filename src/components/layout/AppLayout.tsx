@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
+import { Footer } from "./Footer";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -16,6 +17,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             {children}
           </div>
         </main>
+        <Footer />
       </div>
     </div>
   );

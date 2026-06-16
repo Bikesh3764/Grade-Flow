@@ -1,9 +1,23 @@
 import Link from 'next/link';
 import { GraduationCap, ArrowLeft, BookOpen, MessageCircle, FileQuestion } from 'lucide-react';
+import type { Metadata } from 'next';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Help Center | GradeFlow',
-  description: 'Support, guides, and resources for using GradeFlow effectively.',
+  description: 'Support, guides, and resources for using GradeFlow CGPA, SGPA, and percentage calculators effectively.',
+  alternates: { canonical: 'https://cgpacalculator.xyz/help-center' },
+  openGraph: {
+    title: 'Help Center | GradeFlow',
+    description: 'Support, guides, and resources for using GradeFlow CGPA, SGPA, and percentage calculators effectively.',
+    url: 'https://cgpacalculator.xyz/help-center',
+    siteName: 'GradeFlow',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Help Center | GradeFlow',
+    description: 'Support, guides, and resources for using GradeFlow CGPA, SGPA, and percentage calculators effectively.',
+  },
 };
 
 export default function HelpCenterPage() {

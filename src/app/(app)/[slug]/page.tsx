@@ -17,6 +17,7 @@ import { guideTypes, guides, GuideType } from "@/lib/guides/content";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { VerificationBanner } from "@/components/universities/VerificationBanner";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 type PageType = 
   "cgpa-calculator" | 
@@ -213,11 +214,20 @@ export default async function SEOUniversityPage({ params }: { params: Promise<{ 
   const schema = <StructuredData university={university} pageType={parsed.pageType} url={url} isGuide={parsed.isGuide} />;
   const relatedLinks = parsed.isGuide ? null : <RelatedLinks university={university} currentPage={parsed.pageType} />;
 
+  const pageLabel = parsed.pageType.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  const isGeneric = parsed.uniId === 'general';
+
   if (parsed.isGuide) {
     const guideContent = guides[parsed.pageType as GuideType];
     return (
       <>
         {schema}
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+          <Breadcrumb items={[
+            { label: 'Guides', href: '/what-is-cgpa' },
+            { label: guideContent.title },
+          ]} />
+        </div>
         <SeoGuide guide={guideContent} slug={resolvedParams.slug} />
       </>
     );
@@ -247,9 +257,19 @@ export default async function SEOUniversityPage({ params }: { params: Promise<{ 
       return notFound();
   }
 
+  const breadcrumbItems = isGeneric
+    ? [{ label: pageLabel }]
+    : [
+        { label: university.shortName || university.name, href: `/${university.shortName ? university.shortName.toLowerCase().replace(/[^a-z0-9]+/g, '-') : university.id}-cgpa-calculator` },
+        { label: pageLabel },
+      ];
+
   return (
     <>
       {schema}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+        <Breadcrumb items={breadcrumbItems} />
+      </div>
       {university.isPlaceholder && (
         <div className="max-w-4xl mx-auto mt-8 px-4 sm:px-6 lg:px-8">
           <VerificationBanner universityName={university.name} />

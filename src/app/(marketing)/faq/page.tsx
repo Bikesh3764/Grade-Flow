@@ -2,10 +2,24 @@ import Link from 'next/link';
 import { GraduationCap, ArrowLeft } from 'lucide-react';
 import { DynamicFAQ } from '@/components/seo/DynamicFAQ';
 import { generalUniversity } from '@/lib/universities/registry';
+import type { Metadata } from 'next';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Frequently Asked Questions | GradeFlow',
-  description: 'Answers to common questions about calculating CGPA, SGPA, and using GradeFlow.',
+  description: 'Answers to common questions about calculating CGPA, SGPA, percentage conversions, and using GradeFlow academic tools.',
+  alternates: { canonical: 'https://cgpacalculator.xyz/faq' },
+  openGraph: {
+    title: 'Frequently Asked Questions | GradeFlow',
+    description: 'Answers to common questions about calculating CGPA, SGPA, percentage conversions, and using GradeFlow academic tools.',
+    url: 'https://cgpacalculator.xyz/faq',
+    siteName: 'GradeFlow',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Frequently Asked Questions | GradeFlow',
+    description: 'Answers to common questions about calculating CGPA, SGPA, percentage conversions, and using GradeFlow academic tools.',
+  },
 };
 
 export default function FAQPage() {

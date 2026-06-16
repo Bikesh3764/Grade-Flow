@@ -1,9 +1,23 @@
 import Link from 'next/link';
 import { GraduationCap, ArrowLeft } from 'lucide-react';
+import type { Metadata } from 'next';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Privacy Policy | GradeFlow',
-  description: 'Privacy Policy and data protection guidelines for GradeFlow.',
+  description: 'Privacy Policy and data protection guidelines for GradeFlow. Learn how we handle your data and protect your privacy.',
+  alternates: { canonical: 'https://cgpacalculator.xyz/privacy-policy' },
+  openGraph: {
+    title: 'Privacy Policy | GradeFlow',
+    description: 'Privacy Policy and data protection guidelines for GradeFlow. Learn how we handle your data and protect your privacy.',
+    url: 'https://cgpacalculator.xyz/privacy-policy',
+    siteName: 'GradeFlow',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Privacy Policy | GradeFlow',
+    description: 'Privacy Policy and data protection guidelines for GradeFlow. Learn how we handle your data and protect your privacy.',
+  },
 };
 
 export default function PrivacyPolicyPage() {

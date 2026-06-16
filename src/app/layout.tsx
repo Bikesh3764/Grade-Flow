@@ -3,13 +3,18 @@ import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ServiceWorkerRegistration } from "@/components/ui/ServiceWorkerRegistration";
+import { GlobalStructuredData } from "@/components/seo/GlobalStructuredData";
 import Script from "next/script";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://cgpacalculator.xyz'),
   title: "CGPA Calculator & Academic Tracker | GradeFlow",
   description: "Calculate your CGPA, SGPA, and convert percentages to CGPA instantly. GradeFlow supports specific university grading systems including VIT, SRM, Anna University, KTU, VTU, IPU, and more.",
+  alternates: {
+    canonical: 'https://cgpacalculator.xyz',
+  },
   keywords: [
     "cgpa calculator", "percentage to cgpa calculator", "vit cgpa calculator", "srm cgpa calculator", 
     "sgpa to cgpa calculator", "cgpa calculator vit", "ktu cgpa calculator", "cgpa calculator vtu",
@@ -62,6 +67,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}
           <ServiceWorkerRegistration />
+          <GlobalStructuredData />
         </ThemeProvider>
       </body>
     </html>

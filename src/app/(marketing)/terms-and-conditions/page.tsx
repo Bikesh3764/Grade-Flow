@@ -1,9 +1,23 @@
 import Link from 'next/link';
 import { GraduationCap, ArrowLeft } from 'lucide-react';
+import type { Metadata } from 'next';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Terms & Conditions | GradeFlow',
-  description: 'Terms and Conditions for using GradeFlow calculators and services.',
+  description: 'Terms and Conditions for using GradeFlow CGPA calculators, SGPA tools, and academic grading services.',
+  alternates: { canonical: 'https://cgpacalculator.xyz/terms-and-conditions' },
+  openGraph: {
+    title: 'Terms & Conditions | GradeFlow',
+    description: 'Terms and Conditions for using GradeFlow CGPA calculators, SGPA tools, and academic grading services.',
+    url: 'https://cgpacalculator.xyz/terms-and-conditions',
+    siteName: 'GradeFlow',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Terms & Conditions | GradeFlow',
+    description: 'Terms and Conditions for using GradeFlow CGPA calculators, SGPA tools, and academic grading services.',
+  },
 };
 
 export default function TermsConditionsPage() {

@@ -1,9 +1,23 @@
 import Link from 'next/link';
 import { GraduationCap, ArrowLeft } from 'lucide-react';
+import type { Metadata } from 'next';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Contact Us | GradeFlow',
-  description: 'Get in touch with the GradeFlow team for support and university requests.',
+  description: 'Get in touch with the GradeFlow team for support, feedback, or university grading system requests.',
+  alternates: { canonical: 'https://cgpacalculator.xyz/contact' },
+  openGraph: {
+    title: 'Contact Us | GradeFlow',
+    description: 'Get in touch with the GradeFlow team for support, feedback, or university grading system requests.',
+    url: 'https://cgpacalculator.xyz/contact',
+    siteName: 'GradeFlow',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Contact Us | GradeFlow',
+    description: 'Get in touch with the GradeFlow team for support, feedback, or university grading system requests.',
+  },
 };
 
 export default function ContactPage() {
