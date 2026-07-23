@@ -3,3 +3,5 @@ Allow: /
 Disallow: /private/
 
 Sitemap: https://cgpacalculator.xyz/sitemap.xml
+Sitemap: https://cgpacalculator.xyz/sitemaps/sitemap-0.xml
+Sitemap: https://cgpacalculator.xyz/sitemaps/sitemap-1.xml

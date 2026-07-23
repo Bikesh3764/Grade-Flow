@@ -1,9 +1,12 @@
 /**
  * Static Sitemap Generator
  * 
- * Generates a single, clean static sitemap.xml into public/ at build time.
- * Total URLs: ~9,127 (well within Google's 50,000 URL / 50 MB limit per file).
- * Served directly as a static CDN asset by Cloudflare — zero worker overhead.
+ * Generates:
+ * 1. public/sitemap.xml (Complete sitemap with all 9,127 URLs)
+ * 2. public/sitemaps/sitemap-0.xml (First chunk of 5,000 URLs)
+ * 3. public/sitemaps/sitemap-1.xml (Second chunk of 4,127 URLs)
+ * 
+ * All files are static CDN assets — 100% guaranteed response for Googlebot.
  */
 
 const fs = require('fs');
@@ -13,7 +16,7 @@ const path = require('path');
 const registryPath = path.join(__dirname, '..', 'data', 'universities', 'registry.json');
 const universities = JSON.parse(fs.readFileSync(registryPath, 'utf-8'));
 
-// Guide types (must match src/lib/guides/content.tsx)
+// Guide types
 const guideTypes = [
   "what-is-cgpa",
   "how-to-calculate-cgpa",
@@ -42,6 +45,7 @@ const pageTypes = [
 ];
 
 const baseUrl = 'https://cgpacalculator.xyz';
+const URLS_PER_SITEMAP = 5000;
 
 function getAllUrls() {
   const urls = [];
@@ -111,33 +115,43 @@ function generateUrlsetXml(urls) {
 }
 
 function main() {
-  console.log('🗺️  Generating single flat static sitemap.xml...');
+  console.log('🗺️  Generating complete sitemaps (both flat and chunked)...');
   
   const allUrls = getAllUrls();
   console.log(`   Total URLs: ${allUrls.length}`);
 
   const publicDir = path.join(__dirname, '..', 'public');
-
-  // Clean up legacy sitemaps directory if it exists
   const sitemapsDir = path.join(publicDir, 'sitemaps');
-  if (fs.existsSync(sitemapsDir)) {
-    fs.rmSync(sitemapsDir, { recursive: true, force: true });
-    console.log('   🧹 Cleaned up legacy public/sitemaps directory');
+
+  if (!fs.existsSync(sitemapsDir)) {
+    fs.mkdirSync(sitemapsDir, { recursive: true });
   }
 
-  // Generate single complete sitemap.xml
-  const xml = generateUrlsetXml(allUrls);
+  // 1. Generate chunked sitemaps in public/sitemaps/
+  const totalChunks = Math.ceil(allUrls.length / URLS_PER_SITEMAP);
+  for (let i = 0; i < totalChunks; i++) {
+    const start = i * URLS_PER_SITEMAP;
+    const end = Math.min(start + URLS_PER_SITEMAP, allUrls.length);
+    const chunk = allUrls.slice(start, end);
+    const chunkXml = generateUrlsetXml(chunk);
+    const chunkPath = path.join(sitemapsDir, `sitemap-${i}.xml`);
+    fs.writeFileSync(chunkPath, chunkXml, 'utf-8');
+    console.log(`   ✅ public/sitemaps/sitemap-${i}.xml (${chunk.length} URLs, ${(chunkXml.length / 1024).toFixed(1)} KB)`);
+  }
+
+  // 2. Generate full single sitemap.xml in public/
+  const fullXml = generateUrlsetXml(allUrls);
   const indexPath = path.join(publicDir, 'sitemap.xml');
-  fs.writeFileSync(indexPath, xml, 'utf-8');
-  console.log(`   ✅ public/sitemap.xml (${allUrls.length} URLs, ${(xml.length / (1024 * 1024)).toFixed(2)} MB)`);
+  fs.writeFileSync(indexPath, fullXml, 'utf-8');
+  console.log(`   ✅ public/sitemap.xml (${allUrls.length} URLs, ${(fullXml.length / (1024 * 1024)).toFixed(2)} MB)`);
 
-  // Ensure robots.txt exists and is correct
+  // 3. Ensure robots.txt exists
   const robotsPath = path.join(publicDir, 'robots.txt');
-  const robotsContent = `User-agent: *\nAllow: /\nDisallow: /private/\n\nSitemap: ${baseUrl}/sitemap.xml\n`;
+  const robotsContent = `User-agent: *\nAllow: /\nDisallow: /private/\n\nSitemap: ${baseUrl}/sitemap.xml\nSitemap: ${baseUrl}/sitemaps/sitemap-0.xml\nSitemap: ${baseUrl}/sitemaps/sitemap-1.xml\n`;
   fs.writeFileSync(robotsPath, robotsContent, 'utf-8');
-  console.log('   ✅ public/robots.txt verified');
+  console.log('   ✅ public/robots.txt updated with all sitemap locations');
 
-  console.log('🎉 Single flat sitemap generated successfully!\n');
+  console.log('🎉 All static sitemaps generated successfully!\n');
 }
 
 main();
