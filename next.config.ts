@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import './scripts/generate-sitemaps.js';
 
 const nextConfig: NextConfig = {
   experimental: {
