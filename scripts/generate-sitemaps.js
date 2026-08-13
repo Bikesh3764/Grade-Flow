@@ -75,7 +75,7 @@ function getAllUrls() {
   const currentDate = new Date().toISOString().split('T')[0];
   const urls = getCoreUrls(currentDate);
 
-  // Universities
+  // Universities - Include ONLY primary canonical URLs
   for (const uni of universities) {
     const slugPrefix = uni.shortName
       ? uni.shortName.toLowerCase().replace(/[^a-z0-9]+/g, '-')
@@ -88,14 +88,6 @@ function getAllUrls() {
         changefreq: 'monthly',
         priority: '0.7'
       });
-      if (slugPrefix !== uni.id) {
-        urls.push({
-          loc: `${baseUrl}/${uni.id}-${type}`,
-          lastmod: currentDate,
-          changefreq: 'monthly',
-          priority: '0.6'
-        });
-      }
     }
   }
 
