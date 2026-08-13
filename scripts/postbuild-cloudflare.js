@@ -72,22 +72,35 @@ function patchWorkerAssetsFallback(workerPath) {
   if (!fs.existsSync(workerPath)) return;
   let content = fs.readFileSync(workerPath, 'utf8');
 
-  // Insert env.ASSETS fetch check before calling dynamic handler.mjs import
   const targetCode = `const { handler } = await import("./server-functions/default/handler.mjs");`;
   const replacementCode = `if (env && env.ASSETS) {
                 try {
-                    const assetResp = await env.ASSETS.fetch(request);
+                    let assetResp = await env.ASSETS.fetch(request);
                     if (assetResp && assetResp.status >= 200 && assetResp.status < 400) {
                         return assetResp;
+                    }
+                    const urlObj = new URL(request.url);
+                    if (!urlObj.pathname.includes(".")) {
+                        const cleanPath = urlObj.pathname.endsWith("/") ? urlObj.pathname.slice(0, -1) : urlObj.pathname;
+                        const indexUrl = new URL(cleanPath + "/index.html", request.url);
+                        assetResp = await env.ASSETS.fetch(new Request(indexUrl, request));
+                        if (assetResp && assetResp.status >= 200 && assetResp.status < 400) {
+                            return assetResp;
+                        }
+                        const htmlUrl = new URL(cleanPath + ".html", request.url);
+                        assetResp = await env.ASSETS.fetch(new Request(htmlUrl, request));
+                        if (assetResp && assetResp.status >= 200 && assetResp.status < 400) {
+                            return assetResp;
+                        }
                     }
                 } catch (e) {}
             }
             const { handler } = await import("./server-functions/default/handler.mjs");`;
 
-  if (!content.includes('env.ASSETS.fetch') && content.includes(targetCode)) {
+  if (content.includes(targetCode)) {
     content = content.replace(targetCode, replacementCode);
     fs.writeFileSync(workerPath, content, 'utf8');
-    console.log('✅ Patched _worker.js with env.ASSETS static asset fallback handler');
+    console.log('✅ Patched _worker.js with env.ASSETS multi-path static fallback handler');
   }
 }
 
@@ -159,7 +172,7 @@ if (fs.existsSync(sourceWorker)) {
   // 5. Sanitize absolute paths across all generated code and configs
   sanitizeAbsolutePathsInFolder(assetsDir);
 
-  // 6. Patch _worker.js to serve static assets via env.ASSETS if present
+  // 6. Patch _worker.js to serve static assets via env.ASSETS multi-path fallback
   patchWorkerAssetsFallback(targetWorker);
 
   console.log('🎉 Cloudflare Pages output directory .open-next/assets is fully prepared!');
