@@ -58,7 +58,7 @@ function copySsgHtmlFiles(srcAppDir, targetAssetsDir) {
         if (!fs.existsSync(destDir)) {
           fs.mkdirSync(destDir, { recursive: true });
         }
-        // Copy ONCE as slug/index.html (no duplicate files to stay under 20k Cloudflare limit)
+        // Copy ONCE as slug/index.html (no duplicate files to stay under 20k Cloudflare file limit)
         if (!fs.existsSync(destPath)) {
           fs.copyFileSync(fullPath, destPath);
           copiedCount++;
@@ -78,13 +78,21 @@ function patchWorkerAssetsFallback(workerPath) {
   const targetCode = `const { handler } = await import("./server-functions/default/handler.mjs");`;
   const replacementCode = `if (env && env.ASSETS) {
                 try {
-                    const urlObj = new URL(request.url);
-                    const cleanPath = urlObj.pathname.endsWith("/") ? urlObj.pathname.slice(0, -1) : urlObj.pathname;
-                    const targetPath = cleanPath === "" ? "/index.html" : cleanPath + "/index.html";
-                    const assetUrl = new URL(targetPath, request.url);
-                    const assetResp = await env.ASSETS.fetch(new Request(assetUrl.href, { method: "GET" }));
+                    // 1. Try direct fetch for raw assets (CSS, JS chunks, images, fonts)
+                    let assetResp = await env.ASSETS.fetch(new Request(request.url, { method: "GET" }));
                     if (assetResp && assetResp.status === 200) {
                         return assetResp;
+                    }
+                    // 2. If direct fetch fails and route has no extension, try cleanPath + "/index.html" (for SSG HTML pages)
+                    const urlObj = new URL(request.url);
+                    if (!urlObj.pathname.includes(".")) {
+                        const cleanPath = urlObj.pathname.endsWith("/") ? urlObj.pathname.slice(0, -1) : urlObj.pathname;
+                        const targetPath = cleanPath === "" ? "/index.html" : cleanPath + "/index.html";
+                        const assetUrl = new URL(targetPath, request.url);
+                        assetResp = await env.ASSETS.fetch(new Request(assetUrl.href, { method: "GET" }));
+                        if (assetResp && assetResp.status === 200) {
+                            return assetResp;
+                        }
                     }
                 } catch (e) {}
             }
