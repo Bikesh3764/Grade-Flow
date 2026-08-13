@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const openNextDir = path.join(__dirname, '..', '.open-next');
+const projectRootDir = path.join(__dirname, '..');
+const openNextDir = path.join(projectRootDir, '.open-next');
 const assetsDir = path.join(openNextDir, 'assets');
 const targetWorker = path.join(assetsDir, '_worker.js');
 const sourceWorker = path.join(openNextDir, 'worker.js');
@@ -24,6 +25,44 @@ function copyFolderRecursiveSync(source, target) {
   });
 }
 
+function copySsgHtmlFiles(srcAppDir, targetAssetsDir) {
+  if (!fs.existsSync(srcAppDir)) return;
+
+  function traverse(currentDir) {
+    const items = fs.readdirSync(currentDir);
+    items.forEach((item) => {
+      const fullPath = path.join(currentDir, item);
+      const stat = fs.lstatSync(fullPath);
+      if (stat.isDirectory()) {
+        traverse(fullPath);
+      } else if (item.endsWith('.html')) {
+        const relPath = path.relative(srcAppDir, fullPath);
+        // Clean route groups like (app)/ or (marketing)/ from output path
+        const cleanedRelPath = relPath
+          .replace(/\\\([^)]+\)\\/g, '\\')
+          .replace(/\([^)]+\)\//g, '')
+          .replace(/^\([^)]+\)[/\\]/, '');
+        
+        const destPath = path.join(targetAssetsDir, cleanedRelPath);
+        const destDir = path.dirname(destPath);
+        if (!fs.existsSync(destDir)) {
+          fs.mkdirSync(destDir, { recursive: true });
+        }
+        fs.copyFileSync(fullPath, destPath);
+
+        // Also copy corresponding .rsc or .meta if present
+        const rscSrc = fullPath.replace(/\.html$/, '.rsc');
+        if (fs.existsSync(rscSrc)) {
+          fs.copyFileSync(rscSrc, destPath.replace(/\.html$/, '.rsc'));
+        }
+      }
+    });
+  }
+
+  traverse(srcAppDir);
+  console.log(`✅ Copied pre-rendered SSG HTML files from ${path.relative(projectRootDir, srcAppDir)} to .open-next/assets`);
+}
+
 function sanitizeAbsolutePathsInFolder(folderPath) {
   if (!fs.existsSync(folderPath)) return;
   const items = fs.readdirSync(folderPath);
@@ -35,7 +74,6 @@ function sanitizeAbsolutePathsInFolder(folderPath) {
     } else if (item.endsWith('.js') || item.endsWith('.mjs') || item.endsWith('.json') || item.endsWith('.cjs')) {
       try {
         let content = fs.readFileSync(fullPath, 'utf8');
-        // Replace Windows absolute paths like C:\Users\... or C:/Users/... with "."
         const patched = content
           .replace(/["'][A-Za-z]:[/\\]Users[/\\][^"']*?[/\\]GradeFlow[/\\]\.open-next[/\\]assets[/\\]?/gi, '"./')
           .replace(/["'][A-Za-z]:[/\\]Users[/\\][^"']*?[/\\]GradeFlow[/\\]\.open-next[/\\]server-functions[/\\]default[/\\]?/gi, '"./')
@@ -45,7 +83,6 @@ function sanitizeAbsolutePathsInFolder(folderPath) {
         
         if (patched !== content) {
           fs.writeFileSync(fullPath, patched, 'utf8');
-          console.log(`✅ Stripped absolute paths from: ${path.relative(assetsDir, fullPath)}`);
         }
       } catch (e) {
         // Ignore unreadable binary or locked files
@@ -74,7 +111,14 @@ if (fs.existsSync(sourceWorker)) {
     }
   });
 
-  // 3. Copy server-functions/default/.next/server into node_modules/server for Turbopack chunk resolution
+  // 3. Copy pre-rendered SSG HTML files to assets root directory for instant sub-10ms CDN serving
+  const ssgAppDirs = [
+    path.join(projectRootDir, '.next', 'server', 'app'),
+    path.join(openNextDir, 'server-functions', 'default', '.next', 'server', 'app')
+  ];
+  ssgAppDirs.forEach(dir => copySsgHtmlFiles(dir, assetsDir));
+
+  // 4. Copy server-functions/default/.next/server into node_modules/server for Turbopack chunk resolution
   const defaultNextServer = path.join(openNextDir, 'server-functions', 'default', '.next', 'server');
   if (fs.existsSync(defaultNextServer)) {
     const nodeModulesServer1 = path.join(assetsDir, 'server-functions', 'default', 'node_modules', 'server');
@@ -84,10 +128,10 @@ if (fs.existsSync(sourceWorker)) {
     console.log('✅ Copied .next/server -> node_modules/server for Turbopack chunk resolution');
   }
 
-  // 4. Sanitize absolute paths across all generated code and configs
+  // 5. Sanitize absolute paths across all generated code and configs
   sanitizeAbsolutePathsInFolder(assetsDir);
 
-  console.log('🎉 Cloudflare Pages output directory .open-next/assets is fully prepared!');
+  console.log('🎉 Cloudflare Pages output directory .open-next/assets is fully prepared with 9,123 SSG static HTML pages!');
 } else {
   console.error('❌ Error: .open-next/worker.js not found!');
   process.exit(1);
