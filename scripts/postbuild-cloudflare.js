@@ -27,6 +27,7 @@ function copyFolderRecursiveSync(source, target) {
 
 function copySsgHtmlFiles(srcAppDir, targetAssetsDir) {
   if (!fs.existsSync(srcAppDir)) return;
+  let copiedCount = 0;
 
   function traverse(currentDir) {
     const items = fs.readdirSync(currentDir);
@@ -42,30 +43,29 @@ function copySsgHtmlFiles(srcAppDir, targetAssetsDir) {
           .replace(/\([^)]+\)\//g, '')
           .replace(/^\([^)]+\)[/\\]/, '');
         
-        // 1. Copy as slug.html
-        const destPathHtml = path.join(targetAssetsDir, cleanedRelPath);
-        fs.mkdirSync(path.dirname(destPathHtml), { recursive: true });
-        fs.copyFileSync(fullPath, destPathHtml);
-
-        // 2. Copy as slug/index.html if not root index.html
-        if (cleanedRelPath !== 'index.html' && cleanedRelPath !== 'page.html') {
+        let destPath;
+        if (cleanedRelPath === 'index.html' || cleanedRelPath === 'page.html') {
+          destPath = path.join(targetAssetsDir, 'index.html');
+        } else {
           const slugName = cleanedRelPath.replace(/\.html$/, '');
-          const destPathIndex = path.join(targetAssetsDir, slugName, 'index.html');
-          fs.mkdirSync(path.dirname(destPathIndex), { recursive: true });
-          fs.copyFileSync(fullPath, destPathIndex);
+          destPath = path.join(targetAssetsDir, slugName, 'index.html');
         }
 
-        // Also copy corresponding .rsc if present
-        const rscSrc = fullPath.replace(/\.html$/, '.rsc');
-        if (fs.existsSync(rscSrc)) {
-          fs.copyFileSync(rscSrc, destPathHtml.replace(/\.html$/, '.rsc'));
+        const destDir = path.dirname(destPath);
+        if (!fs.existsSync(destDir)) {
+          fs.mkdirSync(destDir, { recursive: true });
+        }
+        // Copy ONCE as slug/index.html (no duplicate files to keep total under 20k Cloudflare limit)
+        if (!fs.existsSync(destPath)) {
+          fs.copyFileSync(fullPath, destPath);
+          copiedCount++;
         }
       }
     });
   }
 
   traverse(srcAppDir);
-  console.log(`✅ Copied pre-rendered SSG HTML files from ${path.relative(projectRootDir, srcAppDir)} to .open-next/assets`);
+  console.log(`✅ Copied ${copiedCount} pre-rendered SSG HTML files to .open-next/assets`);
 }
 
 function patchWorkerAssetsFallback(workerPath) {
@@ -77,7 +77,7 @@ function patchWorkerAssetsFallback(workerPath) {
                 try {
                     const urlObj = new URL(request.url);
                     const cleanPath = urlObj.pathname.endsWith("/") ? urlObj.pathname.slice(0, -1) : urlObj.pathname;
-                    const targetPath = cleanPath === "" ? "/index.html" : (cleanPath.endsWith(".html") ? cleanPath : cleanPath + "/index.html");
+                    const targetPath = cleanPath === "" ? "/index.html" : cleanPath + "/index.html";
                     const assetUrl = new URL(targetPath, request.url);
                     const assetResp = await env.ASSETS.fetch(new Request(assetUrl.href, { method: "GET" }));
                     if (assetResp && assetResp.status === 200) {
@@ -142,21 +142,19 @@ if (fs.existsSync(sourceWorker)) {
     }
   });
 
-  // 3. Copy pre-rendered SSG HTML files to assets root directory for instant sub-10ms CDN serving
+  // 3. Copy pre-rendered SSG HTML files ONCE as slug/index.html to stay under 20k Cloudflare file limit
   const ssgAppDirs = [
     path.join(projectRootDir, '.next', 'server', 'app'),
     path.join(openNextDir, 'server-functions', 'default', '.next', 'server', 'app')
   ];
   ssgAppDirs.forEach(dir => copySsgHtmlFiles(dir, assetsDir));
 
-  // 4. Copy server-functions/default/.next/server into node_modules/server for Turbopack chunk resolution
+  // 4. Copy server-functions/default/.next/server into server-functions/default/node_modules/server for Turbopack chunk resolution
   const defaultNextServer = path.join(openNextDir, 'server-functions', 'default', '.next', 'server');
   if (fs.existsSync(defaultNextServer)) {
-    const nodeModulesServer1 = path.join(assetsDir, 'server-functions', 'default', 'node_modules', 'server');
-    const nodeModulesServer2 = path.join(assetsDir, 'node_modules', 'server');
-    copyFolderRecursiveSync(defaultNextServer, nodeModulesServer1);
-    copyFolderRecursiveSync(defaultNextServer, nodeModulesServer2);
-    console.log('✅ Copied .next/server -> node_modules/server for Turbopack chunk resolution');
+    const nodeModulesServer = path.join(assetsDir, 'server-functions', 'default', 'node_modules', 'server');
+    copyFolderRecursiveSync(defaultNextServer, nodeModulesServer);
+    console.log('✅ Copied .next/server -> server-functions/default/node_modules/server for Turbopack chunk resolution');
   }
 
   // 5. Sanitize absolute paths across all generated code and configs
@@ -165,7 +163,24 @@ if (fs.existsSync(sourceWorker)) {
   // 6. Patch _worker.js to serve static assets via safe env.ASSETS fallback
   patchWorkerAssetsFallback(targetWorker);
 
-  console.log('🎉 Cloudflare Pages output directory .open-next/assets is fully prepared!');
+  // 7. Verify total file count in .open-next/assets is under 20,000 Cloudflare limit
+  let totalFiles = 0;
+  function countFiles(dir) {
+    fs.readdirSync(dir).forEach((f) => {
+      const p = path.join(dir, f);
+      if (fs.lstatSync(p).isDirectory()) countFiles(p);
+      else totalFiles++;
+    });
+  }
+  countFiles(assetsDir);
+  console.log(`📊 Total files in .open-next/assets: ${totalFiles} (Limit: 20,000)`);
+
+  if (totalFiles > 20000) {
+    console.error(`❌ Error: Total files ${totalFiles} exceeds Cloudflare Pages 20,000 file limit!`);
+    process.exit(1);
+  }
+
+  console.log('🎉 Cloudflare Pages output directory .open-next/assets is fully prepared and verified!');
 } else {
   console.error('❌ Error: .open-next/worker.js not found!');
   process.exit(1);
