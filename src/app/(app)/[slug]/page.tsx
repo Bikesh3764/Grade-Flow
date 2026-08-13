@@ -55,18 +55,11 @@ export async function generateStaticParams() {
     paths.push({ slug: guide });
   }
 
-  // University specific routes - Limit to top 100 to prevent OOM
-  // Remaining 9,900 universities will be generated On-Demand (dynamicParams = true)
-  const topUniversities = universities.slice(0, 100);
-  for (const uni of topUniversities) {
+  // Pre-render ALL 1,009 universities statically for maximum speed and 0 404s
+  for (const uni of universities) {
     const slugPrefix = uni.shortName ? uni.shortName.toLowerCase().replace(/[^a-z0-9]+/g, '-') : uni.id;
     for (const type of pageTypes) {
-      // Use the shortName for cleaner URLs (e.g. vit-cgpa-calculator)
       paths.push({ slug: `${slugPrefix}-${type}` });
-      // Also generate the ID-based one just in case
-      if (slugPrefix !== uni.id) {
-        paths.push({ slug: `${uni.id}-${type}` });
-      }
     }
   }
   return paths;
