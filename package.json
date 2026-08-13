@@ -6,8 +6,8 @@
     "dev": "next dev",
     "prebuild": "node scripts/generate-sitemaps.js",
     "build": "next build",
-    "build:cf": "opennextjs-cloudflare build",
-    "deploy": "opennextjs-cloudflare build && wrangler deploy",
+    "build:cf": "opennextjs-cloudflare build && node scripts/postbuild-cloudflare.js",
+    "deploy": "opennextjs-cloudflare build && node scripts/postbuild-cloudflare.js && wrangler deploy",
     "start": "next start",
     "lint": "eslint"
   },
