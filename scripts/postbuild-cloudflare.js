@@ -78,7 +78,7 @@ function patchWorkerAssetsFallback(workerPath) {
   const targetCode = `const { handler } = await import("./server-functions/default/handler.mjs");`;
   const replacementCode = `if (env && env.ASSETS) {
                 try {
-                    // 1. Try direct fetch for raw assets (CSS, JS chunks, images, fonts)
+                    // 1. Try direct fetch for raw static assets (CSS, JS chunks, images, fonts)
                     let assetResp = await env.ASSETS.fetch(new Request(request.url, { method: "GET" }));
                     if (assetResp && assetResp.status === 200) {
                         return assetResp;
@@ -155,14 +155,22 @@ if (fs.existsSync(sourceWorker)) {
     }
   });
 
-  // 3. Copy pre-rendered SSG HTML files ONCE as slug/index.html to stay under 20k Cloudflare file limit
+  // 3. Copy static CSS, JS chunks, fonts, and images from .next/static into assets/_next/static
+  const srcNextStatic = path.join(projectRootDir, '.next', 'static');
+  const destNextStatic = path.join(assetsDir, '_next', 'static');
+  if (fs.existsSync(srcNextStatic)) {
+    copyFolderRecursiveSync(srcNextStatic, destNextStatic);
+    console.log('✅ Copied .next/static -> assets/_next/static for CSS, JS, font & image assets');
+  }
+
+  // 4. Copy pre-rendered SSG HTML files ONCE as slug/index.html to stay under 20k Cloudflare file limit
   const ssgAppDirs = [
     path.join(projectRootDir, '.next', 'server', 'app'),
     path.join(openNextDir, 'server-functions', 'default', '.next', 'server', 'app')
   ];
   ssgAppDirs.forEach(dir => copySsgHtmlFiles(dir, assetsDir));
 
-  // 4. Copy server-functions/default/.next/server into server-functions/default/server for Turbopack chunk resolution
+  // 5. Copy server-functions/default/.next/server into server-functions/default/server for Turbopack chunk resolution
   const defaultNextServer = path.join(openNextDir, 'server-functions', 'default', '.next', 'server');
   if (fs.existsSync(defaultNextServer)) {
     const serverChunksDest = path.join(assetsDir, 'server-functions', 'default', 'server');
@@ -170,13 +178,13 @@ if (fs.existsSync(sourceWorker)) {
     console.log('✅ Copied .next/server -> server-functions/default/server for Turbopack chunk resolution');
   }
 
-  // 5. Sanitize absolute paths across all generated code and configs
+  // 6. Sanitize absolute paths across all generated code and configs
   sanitizeAbsolutePathsInFolder(assetsDir);
 
-  // 6. Patch _worker.js to serve static assets via safe env.ASSETS fallback
+  // 7. Patch _worker.js to serve static assets via safe env.ASSETS fallback
   patchWorkerAssetsFallback(targetWorker);
 
-  // 7. Verify total file count in .open-next/assets is under 20,000 Cloudflare limit
+  // 8. Verify total file count in .open-next/assets is under 20,000 Cloudflare limit
   let totalFiles = 0;
   function countFiles(dir) {
     fs.readdirSync(dir).forEach((f) => {
