@@ -75,23 +75,13 @@ function patchWorkerAssetsFallback(workerPath) {
   const targetCode = `const { handler } = await import("./server-functions/default/handler.mjs");`;
   const replacementCode = `if (env && env.ASSETS) {
                 try {
-                    let assetResp = await env.ASSETS.fetch(request);
-                    if (assetResp && assetResp.status >= 200 && assetResp.status < 400) {
-                        return assetResp;
-                    }
                     const urlObj = new URL(request.url);
-                    if (!urlObj.pathname.includes(".")) {
-                        const cleanPath = urlObj.pathname.endsWith("/") ? urlObj.pathname.slice(0, -1) : urlObj.pathname;
-                        const indexUrl = new URL(cleanPath + "/index.html", request.url);
-                        assetResp = await env.ASSETS.fetch(new Request(indexUrl, request));
-                        if (assetResp && assetResp.status >= 200 && assetResp.status < 400) {
-                            return assetResp;
-                        }
-                        const htmlUrl = new URL(cleanPath + ".html", request.url);
-                        assetResp = await env.ASSETS.fetch(new Request(htmlUrl, request));
-                        if (assetResp && assetResp.status >= 200 && assetResp.status < 400) {
-                            return assetResp;
-                        }
+                    const cleanPath = urlObj.pathname.endsWith("/") ? urlObj.pathname.slice(0, -1) : urlObj.pathname;
+                    const targetPath = cleanPath === "" ? "/index.html" : (cleanPath.endsWith(".html") ? cleanPath : cleanPath + "/index.html");
+                    const assetUrl = new URL(targetPath, request.url);
+                    const assetResp = await env.ASSETS.fetch(new Request(assetUrl.href, { method: "GET" }));
+                    if (assetResp && assetResp.status === 200) {
+                        return assetResp;
                     }
                 } catch (e) {}
             }
@@ -100,7 +90,7 @@ function patchWorkerAssetsFallback(workerPath) {
   if (content.includes(targetCode)) {
     content = content.replace(targetCode, replacementCode);
     fs.writeFileSync(workerPath, content, 'utf8');
-    console.log('✅ Patched _worker.js with env.ASSETS multi-path static fallback handler');
+    console.log('✅ Patched _worker.js with safe env.ASSETS static asset fallback handler');
   }
 }
 
@@ -172,7 +162,7 @@ if (fs.existsSync(sourceWorker)) {
   // 5. Sanitize absolute paths across all generated code and configs
   sanitizeAbsolutePathsInFolder(assetsDir);
 
-  // 6. Patch _worker.js to serve static assets via env.ASSETS multi-path fallback
+  // 6. Patch _worker.js to serve static assets via safe env.ASSETS fallback
   patchWorkerAssetsFallback(targetWorker);
 
   console.log('🎉 Cloudflare Pages output directory .open-next/assets is fully prepared!');
