@@ -30,7 +30,8 @@ export function Footer() {
         </div>
         <div className="flex flex-col gap-sm">
           <h4 className="font-label-md text-label-md text-on-surface  font-bold mb-xs uppercase tracking-wider">Resources</h4>
-          <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/university-hub">University Directory</Link>
+          <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/directory">All Universities Directory</Link>
+          <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/university-hub">University Hub</Link>
           <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/help-center">Help Center</Link>
           <Link className="font-body-md text-body-md text-on-surface-variant  hover:text-primary :text-primary-fixed transition-colors" href="/what-is-cgpa">Guides</Link>
         </div>

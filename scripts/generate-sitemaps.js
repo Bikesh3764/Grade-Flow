@@ -51,6 +51,7 @@ const URLS_PER_SITEMAP = 4500; // ~4500 URLs per chunk for optimal speed and par
 function getCoreUrls(currentDate) {
   const core = [];
   core.push({ loc: `${baseUrl}/`, lastmod: currentDate, changefreq: 'weekly', priority: '1.0' });
+  core.push({ loc: `${baseUrl}/directory`, lastmod: currentDate, changefreq: 'daily', priority: '1.0' });
   core.push({ loc: `${baseUrl}/dashboard`, lastmod: currentDate, changefreq: 'weekly', priority: '0.9' });
   core.push({ loc: `${baseUrl}/university-hub`, lastmod: currentDate, changefreq: 'weekly', priority: '0.9' });
 
