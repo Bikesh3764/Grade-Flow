@@ -54,7 +54,32 @@ if (fs.existsSync(sourceWorker)) {
     console.log('✅ Copied .next/server -> assets/server-functions/default/server & assets/server');
   }
 
-  // 4. Patch absolute paths in handler.mjs if present
+  // 4. Normalize absolute paths in required-server-files.json
+  const reqFilesPaths = [
+    path.join(openNextDir, 'server-functions', 'default', '.next', 'required-server-files.json'),
+    path.join(assetsDir, 'server-functions', 'default', '.next', 'required-server-files.json')
+  ];
+  reqFilesPaths.forEach((reqPath) => {
+    if (fs.existsSync(reqPath)) {
+      try {
+        const data = JSON.parse(fs.readFileSync(reqPath, 'utf8'));
+        data.appDir = ".";
+        data.outputFileTracingRoot = ".";
+        if (data.config) {
+          data.config.outputFileTracingRoot = ".";
+          if (data.config.turbopack) {
+            data.config.turbopack.root = ".";
+          }
+        }
+        fs.writeFileSync(reqPath, JSON.stringify(data, null, 2), 'utf8');
+        console.log('✅ Normalized absolute paths in required-server-files.json');
+      } catch (err) {
+        console.error('Warning patching required-server-files.json:', err);
+      }
+    }
+  });
+
+  // 5. Patch absolute paths in handler.mjs if present
   const handlerPaths = [
     path.join(assetsDir, 'server-functions', 'default', 'handler.mjs'),
     path.join(assetsDir, '_worker.js')
