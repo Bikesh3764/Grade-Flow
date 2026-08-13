@@ -1,7 +1,7 @@
 import Metadata from 'next';
 import Link from 'next/link';
-import registryData from '@/../data/universities/registry.json';
-import { Building2, GraduationCap, ChevronRight, BookOpen } from 'lucide-react';
+import registryData from '../../../../data/universities/registry.json';
+import { Building2, GraduationCap, ChevronRight } from 'lucide-react';
 
 export const metadata = {
   title: 'All Universities CGPA & SGPA Calculators Directory | GradeFlow',
@@ -34,7 +34,6 @@ interface University {
 
 const universitiesList = registryData as University[];
 
-// Group universities by category / type
 const categories = [
   { name: 'IITs (Indian Institutes of Technology)', filter: (u: University) => u.type === 'IIT' },
   { name: 'NITs (National Institutes of Technology)', filter: (u: University) => u.type === 'NIT' },
