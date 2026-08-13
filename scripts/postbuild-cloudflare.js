@@ -37,7 +37,6 @@ function copySsgHtmlFiles(srcAppDir, targetAssetsDir) {
         traverse(fullPath);
       } else if (item.endsWith('.html')) {
         const relPath = path.relative(srcAppDir, fullPath);
-        // Clean route groups like (app)/ or (marketing)/ from output path
         const cleanedRelPath = relPath
           .replace(/\\\([^)]+\)\\/g, '\\')
           .replace(/\([^)]+\)\//g, '')
@@ -50,7 +49,6 @@ function copySsgHtmlFiles(srcAppDir, targetAssetsDir) {
         }
         fs.copyFileSync(fullPath, destPath);
 
-        // Also copy corresponding .rsc or .meta if present
         const rscSrc = fullPath.replace(/\.html$/, '.rsc');
         if (fs.existsSync(rscSrc)) {
           fs.copyFileSync(rscSrc, destPath.replace(/\.html$/, '.rsc'));
@@ -61,6 +59,24 @@ function copySsgHtmlFiles(srcAppDir, targetAssetsDir) {
 
   traverse(srcAppDir);
   console.log(`✅ Copied pre-rendered SSG HTML files from ${path.relative(projectRootDir, srcAppDir)} to .open-next/assets`);
+}
+
+function patchWorkerForDebug(workerPath) {
+  if (!fs.existsSync(workerPath)) return;
+  let content = fs.readFileSync(workerPath, 'utf8');
+  if (!content.includes('CATCH_DEBUG_PATCH')) {
+    content = content.replace(
+      /async fetch\(request,\s*env,\s*ctx\)\s*\{/g,
+      `async fetch(request, env, ctx) { /* CATCH_DEBUG_PATCH */ try {`
+    );
+    // Add catch before final closing brace of export default
+    content = content.replace(
+      /\}\s*;\s*$/g,
+      `} catch (err) { return new Response("WORKER_ERROR: " + (err.stack || err.message || String(err)), { status: 500, headers: { "content-type": "text/plain" } }); } };`
+    );
+    fs.writeFileSync(workerPath, content, 'utf8');
+    console.log('✅ Patched _worker.js with error catch block for live diagnosis');
+  }
 }
 
 function sanitizeAbsolutePathsInFolder(folderPath) {
@@ -131,7 +147,10 @@ if (fs.existsSync(sourceWorker)) {
   // 5. Sanitize absolute paths across all generated code and configs
   sanitizeAbsolutePathsInFolder(assetsDir);
 
-  console.log('🎉 Cloudflare Pages output directory .open-next/assets is fully prepared with 9,123 SSG static HTML pages!');
+  // 6. Patch _worker.js with error catch block for live diagnosis
+  patchWorkerForDebug(targetWorker);
+
+  console.log('🎉 Cloudflare Pages output directory .open-next/assets is fully prepared!');
 } else {
   console.error('❌ Error: .open-next/worker.js not found!');
   process.exit(1);
