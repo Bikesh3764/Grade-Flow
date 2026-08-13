@@ -44,14 +44,14 @@ if (fs.existsSync(sourceWorker)) {
     }
   });
 
-  // 3. Copy server-functions/default/.next -> assets/.next and assets/server-functions/default/server
+  // 3. Copy server-functions/default/.next/server into node_modules/server for Turbopack chunk resolution
   const defaultNextServer = path.join(openNextDir, 'server-functions', 'default', '.next', 'server');
   if (fs.existsSync(defaultNextServer)) {
-    const destServer1 = path.join(assetsDir, 'server-functions', 'default', 'server');
-    const destServer2 = path.join(assetsDir, 'server');
-    copyFolderRecursiveSync(defaultNextServer, destServer1);
-    copyFolderRecursiveSync(defaultNextServer, destServer2);
-    console.log('✅ Copied .next/server -> assets/server-functions/default/server & assets/server');
+    const nodeModulesServer1 = path.join(assetsDir, 'server-functions', 'default', 'node_modules', 'server');
+    const nodeModulesServer2 = path.join(assetsDir, 'node_modules', 'server');
+    copyFolderRecursiveSync(defaultNextServer, nodeModulesServer1);
+    copyFolderRecursiveSync(defaultNextServer, nodeModulesServer2);
+    console.log('✅ Copied .next/server -> node_modules/server for Turbopack chunk resolution');
   }
 
   // 4. Normalize absolute paths in required-server-files.json
