@@ -15,6 +15,9 @@ function copyFolderRecursiveSync(source, target) {
 
   const files = fs.readdirSync(source);
   files.forEach((file) => {
+    // Skip node_modules inside server-functions to prevent exceeding 20k file limit
+    if (file === 'node_modules') return;
+
     const curSource = path.join(source, file);
     const curTarget = path.join(target, file);
     if (fs.lstatSync(curSource).isDirectory()) {
@@ -55,7 +58,7 @@ function copySsgHtmlFiles(srcAppDir, targetAssetsDir) {
         if (!fs.existsSync(destDir)) {
           fs.mkdirSync(destDir, { recursive: true });
         }
-        // Copy ONCE as slug/index.html (no duplicate files to keep total under 20k Cloudflare limit)
+        // Copy ONCE as slug/index.html (no duplicate files to stay under 20k Cloudflare limit)
         if (!fs.existsSync(destPath)) {
           fs.copyFileSync(fullPath, destPath);
           copiedCount++;
@@ -123,15 +126,17 @@ function sanitizeAbsolutePathsInFolder(folderPath) {
 }
 
 if (fs.existsSync(sourceWorker)) {
-  if (!fs.existsSync(assetsDir)) {
-    fs.mkdirSync(assetsDir, { recursive: true });
+  // Wipe existing assets folder so old files/duplicates are completely removed
+  if (fs.existsSync(assetsDir)) {
+    fs.rmSync(assetsDir, { recursive: true, force: true });
   }
+  fs.mkdirSync(assetsDir, { recursive: true });
 
   // 1. Copy worker.js -> assets/_worker.js
   fs.copyFileSync(sourceWorker, targetWorker);
   console.log('✅ Copied worker.js -> assets/_worker.js');
 
-  // 2. Copy all required support directories into assets folder so relative imports resolve
+  // 2. Copy all required support directories into assets folder (skipping node_modules)
   const dirsToCopy = ['cloudflare', 'middleware', 'server-functions', '.build', 'dynamodb-provider'];
   dirsToCopy.forEach((dirName) => {
     const src = path.join(openNextDir, dirName);
@@ -149,12 +154,12 @@ if (fs.existsSync(sourceWorker)) {
   ];
   ssgAppDirs.forEach(dir => copySsgHtmlFiles(dir, assetsDir));
 
-  // 4. Copy server-functions/default/.next/server into server-functions/default/node_modules/server for Turbopack chunk resolution
+  // 4. Copy server-functions/default/.next/server into server-functions/default/server for Turbopack chunk resolution
   const defaultNextServer = path.join(openNextDir, 'server-functions', 'default', '.next', 'server');
   if (fs.existsSync(defaultNextServer)) {
-    const nodeModulesServer = path.join(assetsDir, 'server-functions', 'default', 'node_modules', 'server');
-    copyFolderRecursiveSync(defaultNextServer, nodeModulesServer);
-    console.log('✅ Copied .next/server -> server-functions/default/node_modules/server for Turbopack chunk resolution');
+    const serverChunksDest = path.join(assetsDir, 'server-functions', 'default', 'server');
+    copyFolderRecursiveSync(defaultNextServer, serverChunksDest);
+    console.log('✅ Copied .next/server -> server-functions/default/server for Turbopack chunk resolution');
   }
 
   // 5. Sanitize absolute paths across all generated code and configs
