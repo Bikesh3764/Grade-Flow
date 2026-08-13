@@ -82,7 +82,7 @@ function parseSlug(slug: string): { uniId: string; pageType: PageType | GuideTyp
   const sortedTypes = [...pageTypes].sort((a, b) => b.length - a.length);
   for (const type of sortedTypes) {
     if (slug.endsWith(`-${type}`)) {
-      const uniId = slug.replace(`-${type}`, '');
+      const uniId = slug.slice(0, slug.length - type.length - 1);
       return { uniId, pageType: type };
     }
   }

@@ -9,9 +9,11 @@ export function getUniversityById(id: string): University | undefined {
 }
 
 export function getUniversityBySlug(slug: string): University | undefined {
+  const cleanSlug = slug.toLowerCase().trim();
   return universities.find(u => {
-    const normalizedShortName = u.shortName ? u.shortName.toLowerCase().replace(/[^a-z0-9]+/g, '-') : '';
-    return u.id === slug || normalizedShortName === slug;
+    const normId = u.id.toLowerCase();
+    const normShort = u.shortName ? u.shortName.toLowerCase().replace(/[^a-z0-9]+/g, '-') : '';
+    return normId === cleanSlug || normShort === cleanSlug;
   });
 }
 
