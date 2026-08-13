@@ -24,6 +24,36 @@ function copyFolderRecursiveSync(source, target) {
   });
 }
 
+function sanitizeAbsolutePathsInFolder(folderPath) {
+  if (!fs.existsSync(folderPath)) return;
+  const items = fs.readdirSync(folderPath);
+  items.forEach((item) => {
+    const fullPath = path.join(folderPath, item);
+    const stat = fs.lstatSync(fullPath);
+    if (stat.isDirectory()) {
+      sanitizeAbsolutePathsInFolder(fullPath);
+    } else if (item.endsWith('.js') || item.endsWith('.mjs') || item.endsWith('.json') || item.endsWith('.cjs')) {
+      try {
+        let content = fs.readFileSync(fullPath, 'utf8');
+        // Replace Windows absolute paths like C:\Users\... or C:/Users/... with "."
+        const patched = content
+          .replace(/["'][A-Za-z]:[/\\]Users[/\\][^"']*?[/\\]GradeFlow[/\\]\.open-next[/\\]assets[/\\]?/gi, '"./')
+          .replace(/["'][A-Za-z]:[/\\]Users[/\\][^"']*?[/\\]GradeFlow[/\\]\.open-next[/\\]server-functions[/\\]default[/\\]?/gi, '"./')
+          .replace(/["'][A-Za-z]:[/\\]Users[/\\][^"']*?[/\\]GradeFlow["']/gi, '"."')
+          .replace(/import\("[^"]*?resvg\.wasm"\)/gi, 'Promise.reject("WASM disabled")')
+          .replace(/import\("[^"]*?yoga\.wasm"\)/gi, 'Promise.reject("WASM disabled")');
+        
+        if (patched !== content) {
+          fs.writeFileSync(fullPath, patched, 'utf8');
+          console.log(`✅ Stripped absolute paths from: ${path.relative(assetsDir, fullPath)}`);
+        }
+      } catch (e) {
+        // Ignore unreadable binary or locked files
+      }
+    }
+  });
+}
+
 if (fs.existsSync(sourceWorker)) {
   if (!fs.existsSync(assetsDir)) {
     fs.mkdirSync(assetsDir, { recursive: true });
@@ -54,45 +84,8 @@ if (fs.existsSync(sourceWorker)) {
     console.log('✅ Copied .next/server -> node_modules/server for Turbopack chunk resolution');
   }
 
-  // 4. Normalize absolute paths in required-server-files.json
-  const reqFilesPaths = [
-    path.join(openNextDir, 'server-functions', 'default', '.next', 'required-server-files.json'),
-    path.join(assetsDir, 'server-functions', 'default', '.next', 'required-server-files.json')
-  ];
-  reqFilesPaths.forEach((reqPath) => {
-    if (fs.existsSync(reqPath)) {
-      try {
-        const data = JSON.parse(fs.readFileSync(reqPath, 'utf8'));
-        data.appDir = ".";
-        data.outputFileTracingRoot = ".";
-        if (data.config) {
-          data.config.outputFileTracingRoot = ".";
-          if (data.config.turbopack) {
-            data.config.turbopack.root = ".";
-          }
-        }
-        fs.writeFileSync(reqPath, JSON.stringify(data, null, 2), 'utf8');
-        console.log('✅ Normalized absolute paths in required-server-files.json');
-      } catch (err) {
-        console.error('Warning patching required-server-files.json:', err);
-      }
-    }
-  });
-
-  // 5. Patch absolute paths in handler.mjs if present
-  const handlerPaths = [
-    path.join(assetsDir, 'server-functions', 'default', 'handler.mjs'),
-    path.join(assetsDir, '_worker.js')
-  ];
-  handlerPaths.forEach((handlerPath) => {
-    if (fs.existsSync(handlerPath)) {
-      let content = fs.readFileSync(handlerPath, 'utf8');
-      content = content.replace(/import\("[^"]*?resvg\.wasm"\)/gi, 'Promise.reject("WASM disabled")');
-      content = content.replace(/import\("[^"]*?yoga\.wasm"\)/gi, 'Promise.reject("WASM disabled")');
-      fs.writeFileSync(handlerPath, content, 'utf8');
-    }
-  });
-  console.log('✅ Patched handler.mjs absolute WASM path references');
+  // 4. Sanitize absolute paths across all generated code and configs
+  sanitizeAbsolutePathsInFolder(assetsDir);
 
   console.log('🎉 Cloudflare Pages output directory .open-next/assets is fully prepared!');
 } else {
