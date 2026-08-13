@@ -42,16 +42,23 @@ function copySsgHtmlFiles(srcAppDir, targetAssetsDir) {
           .replace(/\([^)]+\)\//g, '')
           .replace(/^\([^)]+\)[/\\]/, '');
         
-        const destPath = path.join(targetAssetsDir, cleanedRelPath);
-        const destDir = path.dirname(destPath);
-        if (!fs.existsSync(destDir)) {
-          fs.mkdirSync(destDir, { recursive: true });
-        }
-        fs.copyFileSync(fullPath, destPath);
+        // 1. Copy as slug.html
+        const destPathHtml = path.join(targetAssetsDir, cleanedRelPath);
+        fs.mkdirSync(path.dirname(destPathHtml), { recursive: true });
+        fs.copyFileSync(fullPath, destPathHtml);
 
+        // 2. Copy as slug/index.html if not root index.html
+        if (cleanedRelPath !== 'index.html' && cleanedRelPath !== 'page.html') {
+          const slugName = cleanedRelPath.replace(/\.html$/, '');
+          const destPathIndex = path.join(targetAssetsDir, slugName, 'index.html');
+          fs.mkdirSync(path.dirname(destPathIndex), { recursive: true });
+          fs.copyFileSync(fullPath, destPathIndex);
+        }
+
+        // Also copy corresponding .rsc if present
         const rscSrc = fullPath.replace(/\.html$/, '.rsc');
         if (fs.existsSync(rscSrc)) {
-          fs.copyFileSync(rscSrc, destPath.replace(/\.html$/, '.rsc'));
+          fs.copyFileSync(rscSrc, destPathHtml.replace(/\.html$/, '.rsc'));
         }
       }
     });
@@ -61,21 +68,26 @@ function copySsgHtmlFiles(srcAppDir, targetAssetsDir) {
   console.log(`✅ Copied pre-rendered SSG HTML files from ${path.relative(projectRootDir, srcAppDir)} to .open-next/assets`);
 }
 
-function patchWorkerForDebug(workerPath) {
+function patchWorkerAssetsFallback(workerPath) {
   if (!fs.existsSync(workerPath)) return;
   let content = fs.readFileSync(workerPath, 'utf8');
-  if (!content.includes('CATCH_DEBUG_PATCH')) {
-    content = content.replace(
-      /async fetch\(request,\s*env,\s*ctx\)\s*\{/g,
-      `async fetch(request, env, ctx) { /* CATCH_DEBUG_PATCH */ try {`
-    );
-    // Add catch before final closing brace of export default
-    content = content.replace(
-      /\}\s*;\s*$/g,
-      `} catch (err) { return new Response("WORKER_ERROR: " + (err.stack || err.message || String(err)), { status: 500, headers: { "content-type": "text/plain" } }); } };`
-    );
+
+  // Insert env.ASSETS fetch check before calling dynamic handler.mjs import
+  const targetCode = `const { handler } = await import("./server-functions/default/handler.mjs");`;
+  const replacementCode = `if (env && env.ASSETS) {
+                try {
+                    const assetResp = await env.ASSETS.fetch(request);
+                    if (assetResp && assetResp.status >= 200 && assetResp.status < 400) {
+                        return assetResp;
+                    }
+                } catch (e) {}
+            }
+            const { handler } = await import("./server-functions/default/handler.mjs");`;
+
+  if (!content.includes('env.ASSETS.fetch') && content.includes(targetCode)) {
+    content = content.replace(targetCode, replacementCode);
     fs.writeFileSync(workerPath, content, 'utf8');
-    console.log('✅ Patched _worker.js with error catch block for live diagnosis');
+    console.log('✅ Patched _worker.js with env.ASSETS static asset fallback handler');
   }
 }
 
@@ -147,8 +159,8 @@ if (fs.existsSync(sourceWorker)) {
   // 5. Sanitize absolute paths across all generated code and configs
   sanitizeAbsolutePathsInFolder(assetsDir);
 
-  // 6. Patch _worker.js with error catch block for live diagnosis
-  patchWorkerForDebug(targetWorker);
+  // 6. Patch _worker.js to serve static assets via env.ASSETS if present
+  patchWorkerAssetsFallback(targetWorker);
 
   console.log('🎉 Cloudflare Pages output directory .open-next/assets is fully prepared!');
 } else {
