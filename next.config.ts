@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import './scripts/generate-sitemaps.js';
 
 const nextConfig: NextConfig = {
   async headers() {
@@ -25,7 +24,7 @@ const nextConfig: NextConfig = {
     ];
   },
   experimental: {
-    cpus: 1, // Limit workers to prevent Cloudflare OOM
+    cpus: 1,
     memoryBasedWorkersCount: true,
     optimizePackageImports: ['lucide-react', 'mathjs']
   }
