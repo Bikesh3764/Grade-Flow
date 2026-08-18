@@ -32,23 +32,55 @@ export default function CustomScaleBuilder({ onClose }: { onClose: () => void })
   };
 
   const handleSave = () => {
-    if (!name.trim()) {
+    const trimmedName = name.trim();
+    if (!trimmedName) {
       alert("Please enter a name for your custom scale.");
       return;
     }
-    
-    // Clean mappings
-    const validMappings = mappings.filter(m => m.grade.trim() !== '' && !isNaN(m.points));
-    
-    if (validMappings.length < 2) {
+
+    const normalizedMappings = mappings
+      .map((mapping) => ({
+        ...mapping,
+        grade: mapping.grade.trim(),
+        points: Number(mapping.points),
+      }))
+      .filter((mapping) => mapping.grade !== "" && Number.isFinite(mapping.points));
+
+    if (normalizedMappings.length < 2) {
       alert("Please define at least two valid grades.");
+      return;
+    }
+
+    const seenGrades = new Set<string>();
+    for (const mapping of normalizedMappings) {
+      const gradeKey = mapping.grade.toUpperCase();
+      if (seenGrades.has(gradeKey)) {
+        alert("Each grade must be unique.");
+        return;
+      }
+      seenGrades.add(gradeKey);
+      if (mapping.points < 0) {
+        alert("Grade points cannot be negative.");
+        return;
+      }
+    }
+
+    const maxPoints = Math.max(...normalizedMappings.map((mapping) => mapping.points));
+    if (!Number.isFinite(maxPoints) || maxPoints <= 0) {
+      alert("At least one grade must have a point value greater than 0.");
+      return;
+    }
+
+    const hasFailGrade = normalizedMappings.some((mapping) => mapping.points === 0);
+    if (!hasFailGrade) {
+      alert("Add at least one 0-point grade (typically F) so failed subjects can be represented correctly.");
       return;
     }
 
     const newScale: GlobalScale = {
       id: `custom-${Date.now()}`,
-      name: name.trim(),
-      gradingScale: validMappings.sort((a, b) => b.points - a.points) // Sort highest to lowest
+      name: trimmedName,
+      gradingScale: [...normalizedMappings].sort((a, b) => b.points - a.points),
     };
 
     addCustomScale(newScale);
@@ -64,7 +96,9 @@ export default function CustomScaleBuilder({ onClose }: { onClose: () => void })
             <h2 className="text-title-lg font-bold text-on-surface">Build Custom Scale</h2>
             <p className="text-body-sm text-on-surface-variant mt-1">Define your own grade mappings to use globally.</p>
           </div>
-          <button 
+          <button
+            type="button"
+            aria-label="Close custom scale builder"
             onClick={onClose}
             className="p-2 rounded-full hover:bg-surface-variant text-on-surface-variant transition-colors"
           >
@@ -75,8 +109,8 @@ export default function CustomScaleBuilder({ onClose }: { onClose: () => void })
         <div className="p-6 overflow-y-auto flex-1 space-y-6">
           <div>
             <label className="block text-label-sm font-semibold text-outline uppercase tracking-wider mb-2">Scale Name</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               value={name}
               onChange={e => setName(e.target.value)}
               placeholder="e.g. My Custom 8-Point Scale"
@@ -87,7 +121,8 @@ export default function CustomScaleBuilder({ onClose }: { onClose: () => void })
           <div>
             <div className="flex items-center justify-between mb-4">
               <label className="block text-label-sm font-semibold text-outline uppercase tracking-wider">Grade Mappings</label>
-              <button 
+              <button
+                type="button"
                 onClick={handleAddRow}
                 className="text-label-sm text-primary font-semibold flex items-center gap-1 hover:text-primary/80 transition-colors"
               >
@@ -99,8 +134,8 @@ export default function CustomScaleBuilder({ onClose }: { onClose: () => void })
               {mappings.map((mapping, index) => (
                 <div key={index} className="flex items-center gap-3">
                   <div className="w-1/4">
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       placeholder="Grade (e.g. A+)"
                       value={mapping.grade}
                       onChange={e => handleUpdateRow(index, 'grade', e.target.value)}
@@ -109,25 +144,28 @@ export default function CustomScaleBuilder({ onClose }: { onClose: () => void })
                   </div>
                   <ArrowRight size={16} className="text-outline-variant shrink-0" />
                   <div className="w-1/4">
-                    <input 
-                      type="number" 
+                    <input
+                      type="number"
                       step="0.01"
+                      min="0"
                       placeholder="Points"
                       value={mapping.points === 0 && mapping.grade === '' ? '' : mapping.points}
-                      onChange={e => handleUpdateRow(index, 'points', parseFloat(e.target.value))}
+                      onChange={e => handleUpdateRow(index, 'points', e.target.value === '' ? NaN : parseFloat(e.target.value))}
                       className="w-full h-10 px-3 rounded-lg bg-surface-container border border-outline-variant/30 focus:outline-none focus:border-primary/50 text-body-sm"
                     />
                   </div>
                   <div className="flex-1">
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       placeholder="Description (Optional)"
                       value={mapping.description || ''}
                       onChange={e => handleUpdateRow(index, 'description', e.target.value)}
                       className="w-full h-10 px-3 rounded-lg bg-surface-container border border-outline-variant/30 focus:outline-none focus:border-primary/50 text-body-sm"
                     />
                   </div>
-                  <button 
+                  <button
+                    type="button"
+                    aria-label={`Remove grade ${index + 1}`}
                     onClick={() => handleRemoveRow(index)}
                     disabled={mappings.length <= 2}
                     className="p-2 rounded-lg text-outline hover:text-error hover:bg-error-container/50 transition-colors disabled:opacity-30"
@@ -141,13 +179,15 @@ export default function CustomScaleBuilder({ onClose }: { onClose: () => void })
         </div>
 
         <div className="p-6 border-t border-outline-variant/20 bg-surface-container-lowest flex justify-end gap-3">
-          <button 
+          <button
+            type="button"
             onClick={onClose}
             className="px-6 py-2.5 rounded-xl font-medium text-on-surface hover:bg-surface-variant transition-colors"
           >
             Cancel
           </button>
-          <button 
+          <button
+            type="button"
             onClick={handleSave}
             className="px-6 py-2.5 rounded-xl bg-primary text-on-primary font-medium hover:bg-primary/90 transition-colors flex items-center gap-2 shadow-sm"
           >
