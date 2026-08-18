@@ -4,27 +4,28 @@ import { useState } from "react";
 import { useAppStore } from "@/lib/store";
 import { getActiveRegulation } from "@/lib/universities/registry";
 import { calculateSGPA } from "@/lib/universities/engine";
-import { Plus, Trash2, Save, RefreshCw } from "lucide-react";
+import { Plus, Trash2, RefreshCw } from "lucide-react";
+
+const defaultInputs = [
+  { id: "1", subject: "Subject 1", grade: "", credits: "3" },
+  { id: "2", subject: "Subject 2", grade: "", credits: "3" },
+  { id: "3", subject: "Subject 3", grade: "", credits: "4" },
+  { id: "4", subject: "Subject 4", grade: "", credits: "4" },
+];
 
 export default function SGPACalculator() {
   const profile = useAppStore(state => state.profile);
-  const addSemester = useAppStore(state => state.addSemester);
 
-  const { university, regulation, isGeneral, activeScale } = getActiveRegulation(profile);
+  const { university, regulation, activeScale } = getActiveRegulation(profile);
   const maxPoints = activeScale.gradingScale.reduce((max, g) => Math.max(max, g.points), 0);
   const profileName = activeScale.id === 'university-default' ? regulation.name : activeScale.name;
   const displayProfile = `${university?.shortName || "General"} - ${profileName}`;
 
-  const [inputs, setInputs] = useState<{ id: string; subject: string; grade: string; credits: string }[]>([
-    { id: "1", subject: "Subject 1", grade: "", credits: "3" },
-    { id: "2", subject: "Subject 2", grade: "", credits: "3" },
-    { id: "3", subject: "Subject 3", grade: "", credits: "4" },
-    { id: "4", subject: "Subject 4", grade: "", credits: "4" },
-  ]);
+  const [inputs, setInputs] = useState(defaultInputs);
 
   const addInput = () => {
     setInputs([
-      ...inputs, 
+      ...inputs,
       { id: Date.now().toString(), subject: `Subject ${inputs.length + 1}`, grade: "", credits: "" }
     ]);
   };
@@ -39,26 +40,22 @@ export default function SGPACalculator() {
   };
 
   const validCourses = inputs.map(input => {
-    if (!input.grade || !input.credits || isNaN(parseFloat(input.credits))) return null;
-    const c = parseFloat(input.credits);
-    if (c <= 0) return null;
-    
-    // Map grade against active scale, NOT regulation's default scale
+    if (!input.grade || !input.credits || Number.isNaN(Number(input.credits))) return null;
+    const credits = Number(input.credits);
+    if (!Number.isFinite(credits) || credits <= 0) return null;
+
     const gradeDef = activeScale.gradingScale.find(g => g.grade.toUpperCase() === input.grade.toUpperCase());
     if (!gradeDef) return null;
-    
-    return {
-      points: gradeDef.points,
-      credits: c
-    };
-  }).filter(Boolean) as { points: number, credits: number }[];
 
-  const currentSgpa = regulation && validCourses.length > 0 ? calculateSGPA(regulation, validCourses) : 0;
+    return { points: gradeDef.points, credits };
+  }).filter(Boolean) as { points: number; credits: number }[];
+
+  const currentSgpa = validCourses.length > 0 ? calculateSGPA(regulation, validCourses) : 0;
   const totalCredits = validCourses.reduce((sum, c) => sum + c.credits, 0);
 
   const hasCreditsError = inputs.some(i => {
-    const c = parseFloat(i.credits);
-    return i.credits !== "" && !isNaN(c) && c <= 0;
+    const credits = Number(i.credits);
+    return i.credits !== "" && (!Number.isFinite(credits) || credits <= 0);
   });
 
   return (
@@ -77,7 +74,7 @@ export default function SGPACalculator() {
           <div className="glass-panel rounded-2xl p-6">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-title-md font-bold text-on-surface">Subject Details</h3>
-              <button onClick={addInput} className="text-label-sm font-semibold text-primary flex items-center gap-1 hover:text-primary/80 transition-colors">
+              <button type="button" onClick={addInput} className="text-label-sm font-semibold text-primary flex items-center gap-1 hover:text-primary/80 transition-colors">
                 <Plus size={16} /> Add Subject
               </button>
             </div>
@@ -89,13 +86,13 @@ export default function SGPACalculator() {
                 <div className="flex-1">Credits</div>
                 <div className="w-10"></div>
               </div>
-              
+
               {inputs.map((input) => (
                 <div key={input.id} className="flex flex-col sm:flex-row gap-4 p-4 sm:p-2 sm:px-4 rounded-xl border border-outline-variant/30 sm:border-transparent bg-surface-container-lowest sm:bg-transparent transition-all hover:bg-surface-variant/20">
                   <div className="flex-[2]">
                     <label className="block sm:hidden text-label-sm text-outline font-semibold mb-1 uppercase tracking-wider">Subject</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       value={input.subject}
                       onChange={(e) => handleUpdate(input.id, "subject", e.target.value)}
                       className="w-full h-11 px-3 rounded-lg bg-surface-container sm:bg-surface-container-low border border-outline-variant/30 focus:outline-none focus:border-primary/50 text-body-sm"
@@ -103,25 +100,23 @@ export default function SGPACalculator() {
                   </div>
                   <div className="flex-1">
                     <label className="block sm:hidden text-label-sm text-outline font-semibold mb-1 uppercase tracking-wider">Grade</label>
-                    <select 
+                    <select
                       value={input.grade}
                       onChange={(e) => handleUpdate(input.id, "grade", e.target.value)}
                       className="w-full h-11 px-3 rounded-lg bg-surface-container sm:bg-surface-container-low border border-outline-variant/30 focus:outline-none focus:border-primary/50 text-body-sm font-semibold"
                     >
                       <option value="">Select</option>
                       {activeScale.gradingScale.map(scale => (
-                        <option key={scale.grade} value={scale.grade}>
-                          {scale.grade} ({scale.points} pts)
-                        </option>
+                        <option key={scale.grade} value={scale.grade}>{scale.grade} ({scale.points} pts)</option>
                       ))}
                     </select>
                   </div>
                   <div className="flex-1">
                     <label className="block sm:hidden text-label-sm text-outline font-semibold mb-1 uppercase tracking-wider">Credits</label>
-                    <input 
+                    <input
                       type="number"
                       step="0.5"
-                      min="1"
+                      min="0.01"
                       value={input.credits}
                       onChange={(e) => handleUpdate(input.id, "credits", e.target.value)}
                       placeholder="e.g. 3"
@@ -129,7 +124,9 @@ export default function SGPACalculator() {
                     />
                   </div>
                   <div className="flex items-center justify-end sm:pt-0 pt-2 shrink-0 w-10">
-                    <button 
+                    <button
+                      type="button"
+                      aria-label={`Remove ${input.subject || 'subject'}`}
                       onClick={() => removeInput(input.id)}
                       disabled={inputs.length === 1}
                       className="p-2 rounded-lg text-outline hover:text-error hover:bg-error-container/50 transition-colors disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-outline"
@@ -140,10 +137,11 @@ export default function SGPACalculator() {
                 </div>
               ))}
             </div>
-            
+
             <div className="mt-8 flex justify-end">
-              <button 
-                onClick={() => setInputs([{ id: "1", subject: "Subject 1", grade: "", credits: "" }])}
+              <button
+                type="button"
+                onClick={() => setInputs(defaultInputs.map((input) => ({ ...input })))}
                 className="px-4 py-2 text-label-sm font-semibold text-outline hover:text-on-surface transition-colors flex items-center gap-2"
               >
                 <RefreshCw size={16} /> Reset Form
@@ -152,7 +150,7 @@ export default function SGPACalculator() {
 
             {hasCreditsError && (
               <div className="mt-4 p-3 rounded-lg bg-error-container/50 border border-error/20 text-error text-label-sm flex flex-col gap-1">
-                <div className="flex items-center gap-2"><span className="font-bold">Error:</span> Credits must be greater than 0.</div>
+                <div className="flex items-center gap-2"><span className="font-bold">Error:</span> Credits must be valid positive numbers.</div>
               </div>
             )}
           </div>
@@ -161,7 +159,6 @@ export default function SGPACalculator() {
         <div className="lg:col-span-1">
           <div className="glass-panel rounded-2xl p-6 sticky top-24 border-t-4 border-t-primary">
             <h3 className="text-title-lg font-bold text-on-surface mb-6">Results</h3>
-            
             <div className="space-y-6">
               <div>
                 <div className="text-label-md uppercase tracking-wider text-outline font-semibold mb-1">Calculated SGPA</div>
@@ -182,9 +179,7 @@ export default function SGPACalculator() {
             </div>
 
             <div className="mt-8 p-4 rounded-xl bg-surface-container-low border border-outline-variant/20">
-              <h4 className="text-label-sm font-semibold text-on-surface mb-2 flex items-center gap-2">
-                Grading Scale Key
-              </h4>
+              <h4 className="text-label-sm font-semibold text-on-surface mb-2 flex items-center gap-2">Grading Scale Key</h4>
               <div className="flex flex-wrap gap-2">
                 {activeScale.gradingScale.map(scale => (
                   <div key={scale.grade} className="flex items-center gap-1.5 px-2 py-1 bg-surface rounded text-body-xs font-mono border border-outline-variant/30">

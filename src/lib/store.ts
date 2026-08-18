@@ -22,7 +22,7 @@ export type Semester = {
 export type UserProfile = {
   universityId: string | null;
   regulationId: string | null;
-  activeScaleId: string; // 'university-default' or global/custom scale id
+  activeScaleId: string;
   customScales: GlobalScale[];
   targetCgpa: number | null;
   semesters: Semester[];
@@ -57,30 +57,50 @@ interface AppState {
   clearUniversity: () => void;
 }
 
-const initialState: UserProfile = {
-  universityId: null,
-  regulationId: null,
-  activeScaleId: 'university-default',
-  customScales: [],
-  targetCgpa: null,
-  semesters: [],
-  name: "Student",
-  email: "student@university.edu",
-  preferences: {
-    institutionalSync: true,
-    privacyMode: false,
-    notifications: true,
-  },
-  display: {
-    theme: 'light',
-    fontSize: 'standard',
-  },
-};
+function createInitialState(): UserProfile {
+  return {
+    universityId: null,
+    regulationId: null,
+    activeScaleId: 'university-default',
+    customScales: [],
+    targetCgpa: null,
+    semesters: [],
+    name: 'Student',
+    email: 'student@university.edu',
+    preferences: {
+      institutionalSync: true,
+      privacyMode: false,
+      notifications: true,
+    },
+    display: {
+      theme: 'light',
+      fontSize: 'standard',
+    },
+  };
+}
+
+function migrateProfile(profile: Partial<UserProfile> | undefined): UserProfile {
+  const defaults = createInitialState();
+  return {
+    ...defaults,
+    ...profile,
+    customScales: Array.isArray(profile?.customScales) ? profile.customScales : [],
+    semesters: Array.isArray(profile?.semesters) ? profile.semesters : [],
+    preferences: {
+      ...defaults.preferences,
+      ...(profile?.preferences ?? {}),
+    },
+    display: {
+      ...defaults.display,
+      ...(profile?.display ?? {}),
+    },
+  };
+}
 
 export const useAppStore = create<AppState>()(
   persist(
     (set) => ({
-      profile: initialState,
+      profile: createInitialState(),
       setUniversity: (universityId, regulationId) =>
         set((state) => ({
           profile: { ...state.profile, universityId, regulationId, activeScaleId: 'university-default' },
@@ -93,13 +113,14 @@ export const useAppStore = create<AppState>()(
         set((state) => ({
           profile: {
             ...state.profile,
-            customScales: [...state.profile.customScales, scale],
+            customScales: [...state.profile.customScales.filter((s) => s.id !== scale.id), scale],
           },
         })),
       removeCustomScale: (scaleId) =>
         set((state) => ({
           profile: {
             ...state.profile,
+            activeScaleId: state.profile.activeScaleId === scaleId ? 'university-default' : state.profile.activeScaleId,
             customScales: state.profile.customScales.filter((s) => s.id !== scaleId),
           },
         })),
@@ -152,13 +173,24 @@ export const useAppStore = create<AppState>()(
             semesters: state.profile.semesters.filter((sem) => sem.id !== id),
           },
         })),
-      clearData: () => set({ profile: initialState }),
-      clearUniversity: () => set((state) => ({ profile: { ...state.profile, universityId: null, regulationId: null } })),
+      clearData: () => set({ profile: createInitialState() }),
+      clearUniversity: () => set((state) => ({
+        profile: {
+          ...state.profile,
+          universityId: null,
+          regulationId: null,
+          activeScaleId: 'university-default',
+        },
+      })),
     }),
     {
       name: 'gradeflow-storage',
+      version: 1,
+      migrate: (persistedState) => {
+        const state = persistedState as { profile?: Partial<UserProfile> } | undefined;
+        return { profile: migrateProfile(state?.profile) };
+      },
+      partialize: (state) => ({ profile: state.profile }),
     }
   )
 );
-
-
